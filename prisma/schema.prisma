@@ -20,32 +20,93 @@ enum AccessType {
   XXLARGE
 }
 
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+enum ProviderType {
+  STRIPE
+  PAYPAL
+  NOWPAYMENTS
+  FLUTTERWAVE
+}
+
+enum PaymentMethod {
+  CARD
+  BANK_TRANSFER
+  CRYPTOCURRENCY
+  PAYPAL
+  CASH
+  OTHER
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  INACTIVE
+  CANCELLED
+  EXPIRED
+}
+
+
+
 model User {
-  id           String        @id @default(ulid())
-  uid          String        @unique
-  email        String        @unique
+  id           String         @id @default(ulid())
+  uid          String         @unique
+  email        String         @unique
   location     String
-  currentplan  AccessType    @default(FREE)
+  currentPlan  AccessType     @default(FREE)
   payments     Payment[]
   transactions Transaction[]
+  subscription Subscription[]
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
 }
 
 model Payment {
-  id     String  @id @default(uuid())
-  amount Float
-  User   User?   @relation(fields: [userId], references: [id])
-  userId String?
+  id            String        @id @default(uuid())
+  amount        Float
+  User          User          @relation(fields: [userId], references: [id])
+  userId        String
+  status        PaymentStatus @default(PENDING)
+  transactionId String        @unique
+  paymentMethod PaymentMethod @default(CRYPTOCURRENCY)
+  provider      ProviderType  @default(NOWPAYMENTS)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
 }
 
 model Transaction {
-  id     String  @id @default(uuid())
-  amount Float
-  User   User?   @relation(fields: [userId], references: [id])
-  userId String?
+  id        String   @id @default(uuid())
+  amount    Float
+  User      User     @relation(fields: [userId], references: [id])
+  userId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Plans {
-  id       String @id @default(uuid())
-  price    Float
-  features String
+  id          String     @id @default(uuid())
+  title       String
+  description String
+  accessType  AccessType
+  price       Float
+  features    String
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+model Subscription {
+  id        String             @id @default(uuid())
+  userId    String
+  planId    String
+  user      User               @relation(fields: [userId], references: [id])
+  plan      AccessType
+  status    SubscriptionStatus @default(ACTIVE)
+  startDate DateTime           @default(now())
+  endDate   DateTime
+  createdAt DateTime           @default(now())
+  updatedAt DateTime           @updatedAt
 }

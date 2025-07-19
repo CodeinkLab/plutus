@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import "./globals.css"
 import localFont from 'next/font/local'
-import { DialogProvider } from "@/lib/dialog"
+import { DialogProvider } from "@/app/lib/dialog"
 
 export const metadata: Metadata = {
   title: "Plutus | Crypto Receipt && Real Crypto Flasher",

@@ -4,7 +4,7 @@
 import { useState } from "react"
 import { BlockchainData, FormValues } from "./interfaces"
 import { defaultFormValues } from "./declarations"
-import { useDialog } from "@/lib/dialog"
+import { useDialog } from "@/app/lib/dialog"
 
 export const useActions = () => {
     const dialog = useDialog()
