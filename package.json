@@ -25,7 +25,6 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
-    "postbuild": "node trailingslashes.js",
     "start": "next start",
     "lint": "next lint",
     "postinstall": "prisma generate"
