@@ -29,6 +29,7 @@ CREATE TABLE "User" (
     "currentPlan" "AccessType" NOT NULL DEFAULT 'FREE',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
+    "referrerId" TEXT,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
@@ -40,6 +41,7 @@ CREATE TABLE "Payment" (
     "userId" TEXT NOT NULL,
     "status" "PaymentStatus" NOT NULL DEFAULT 'PENDING',
     "transactionId" TEXT NOT NULL,
+    "currency" TEXT NOT NULL DEFAULT 'USD',
     "paymentMethod" "PaymentMethod" NOT NULL DEFAULT 'CRYPTOCURRENCY',
     "provider" "ProviderType" NOT NULL DEFAULT 'NOWPAYMENTS',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -91,8 +93,23 @@ CREATE TABLE "Subscription" (
     CONSTRAINT "Subscription_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "Sponsorship" (
+    "id" TEXT NOT NULL,
+    "sponsorId" TEXT NOT NULL,
+    "sponseeId" TEXT NOT NULL,
+    "sponsoredAmount" DOUBLE PRECISION NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Sponsorship_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
-CREATE UNIQUE INDEX "User_SMTP_key" ON "User"("email");
+CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_referrerId_key" ON "User"("referrerId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Payment_transactionId_key" ON "Payment"("transactionId");
@@ -108,3 +125,9 @@ ALTER TABLE "Transaction" ADD CONSTRAINT "Transaction_userId_fkey" FOREIGN KEY (
 
 -- AddForeignKey
 ALTER TABLE "Subscription" ADD CONSTRAINT "Subscription_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Sponsorship" ADD CONSTRAINT "Sponsorship_sponsorId_fkey" FOREIGN KEY ("sponsorId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Sponsorship" ADD CONSTRAINT "Sponsorship_sponseeId_fkey" FOREIGN KEY ("sponseeId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

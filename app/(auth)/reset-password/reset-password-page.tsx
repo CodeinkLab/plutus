@@ -8,7 +8,7 @@ import { LoaderCircle } from 'lucide-react'
 
 function ResetPasswordContent() {
     const searchParams = useSearchParams()
-    const token = searchParams.get('token')
+    const token = searchParams?.get('token')
 
     return token ? <ResetPasswordWithToken /> : <ResetPasswordForm />
 }

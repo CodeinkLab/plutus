@@ -57,23 +57,25 @@ enum TransactionStatus {
 }
 
 model User {
-  id            String         @id @default(cuid())
-  ip            String
-  username      String
-  email         String         @unique
-  password      String
-  emailVerified Boolean        @default(false)
-  location      String
-  role          String         @default("USER")
-  currentPlan   AccessType     @default(FREE)
-  payments      Payment[]
-  transactions  Transaction[]
-  subscription  Subscription[]
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
-  referrerId    String?        @unique @default(cuid())
-  sponsors      Sponsorship[]  @relation("UserSponsor")
-  sponsee       Sponsorship[]  @relation("UserSponsee")
+  id               String         @id @default(cuid())
+  ip               String
+  username         String
+  email            String         @unique
+  password         String
+  emailVerified    Boolean        @default(false)
+  location         String
+  role             String         @default("USER")
+  resetToken       String?
+  resetTokenExpiry DateTime?
+  currentPlan      AccessType     @default(FREE)
+  payments         Payment[]
+  transactions     Transaction[]
+  subscription     Subscription[]
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+  referrerId       String?        @unique @default(cuid())
+  sponsors         Sponsorship[]  @relation("UserSponsor")
+  sponsee          Sponsorship[]  @relation("UserSponsee")
 }
 
 model Payment {

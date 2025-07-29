@@ -60,7 +60,7 @@ export async function POST(request: NextRequest) {
         userId: user.id,
         status: 'PENDING',
         currency: payCurrency.toUpperCase(),
-        transactionId: "5601831053",//paymentResponse.payment_id,
+        transactionId: paymentResponse.payment_id,
         paymentMethod: 'CRYPTOCURRENCY',
         provider: 'NOWPAYMENTS',
       },

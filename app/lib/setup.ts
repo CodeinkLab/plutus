@@ -5,7 +5,6 @@ import axios from "axios";
 import { dataTansaction, getDataById } from "./database";
 import { getCurrentUser, setAuthCookie, signJWT } from "../utils/jwt";
 import { NextResponse } from "next/server";
-import cloudscraper from 'cloudscraper';
 import { scrapeBlockchainPrices } from "../actions/prices";
 
 export const scrapeEthereumData = async () => {
