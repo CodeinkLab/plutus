@@ -8,7 +8,7 @@ import { useContent } from '../hooks/context'
 
 const WalletAndUserInfo = ({ user, location }: { user: any, location: any }) => {
     const { blockchainData, isLoading, walletNetwork } = useContent()
-    
+
     return (
         <div className="flex flex-col w-full text-xs md:text-sm md:max-w-sm">
             {/* Info Panels */}
@@ -60,7 +60,7 @@ const WalletAndUserInfo = ({ user, location }: { user: any, location: any }) => 
                 </div>
                 <div suppressHydrationWarning className="w-full flex flex-col gap-1.5 relative border border-neutral-400 h-40 p-4">
                     <h3 className="absolute -top-3 left-2 font-extrabold mb-2 bg-black px-2">Client Info</h3>
-                    <div className="flex space-x-2">
+                    {user && <div className="flex space-x-2">
                         <div className="flex flex-col">
                             {/* <p className="text-base">Username</p> */}
                             <p className='text-xs '>{user.username}</p>
@@ -73,7 +73,7 @@ const WalletAndUserInfo = ({ user, location }: { user: any, location: any }) => 
                             {/* <p className="text-base">IP Address</p> */}
                             <p className='text-xs'>{location.ip}</p>
                         </div>
-                    </div>
+                    </div>}
                     <div className="flex space-x-2">
                         <div className="flex flex-col">
                             {/* <p className="text-base">Location</p> */}
@@ -110,12 +110,15 @@ const WalletAndUserInfo = ({ user, location }: { user: any, location: any }) => 
                             <p className='text-xs'>{moment(location.currenttime).format("LLL")} - {location.abbr}</p>
                         </div>
                     </div>
-                    <div className="flex space-x-2">
+                    {user && <div className="flex space-x-2">
                         {user.plan === "FREE" && <div className="flex gap-2 items-center">
                             <Server className='text-green-800 size-4' />
                             <p className='text-xs'>No Dedicated Server Owned</p>
                         </div>}
-                    </div>
+                    </div>}
+                    {user && <div className="flex space-x-2">
+                        
+                    </div>}
 
                 </div>
             </div>

@@ -17,13 +17,15 @@ export default async function Home() {
   const forwardedFor = (await headersList).get('x-forwarded-for')
   const ip = forwardedFor?.split(',')[0] || '8.8.8.8'
   const location = await getLocationData(ip)
-  const user = process.env.NODE_ENV === "production" ?
-    await getCurrentUser() : {
+  const user = await getCurrentUser()
+
+  /* const user = process.env.NODE_ENV === "production" ? currentuser :
+    {
       username: "RazorBlade",
       password: "****************",
       email: "razorblade@plutus.com",
       plan: "FREE",
-    }
+    } */
 
 
   return (
@@ -40,7 +42,7 @@ export default async function Home() {
       </div>
       <FlashingButton />
       <LogViewer />
-      
+
       {/* Pricing Section */}
       <div className="w-full mt-8">
         <Pricing />
