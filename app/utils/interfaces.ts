@@ -1,3 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+import { ReactNode } from "react"
+import { DialogType } from "./types"
+
 /* eslint-disable @typescript-eslint/no-empty-object-type */
 export interface SystemInfo {
   system: {
@@ -73,4 +78,70 @@ export interface FormValues {
   receiveremail: string
   server: {}
   currency: string
-} 
+}
+
+
+export interface BlockchainAddressData {
+  address: string;
+  balance: number;
+  totalReceived: number;
+  totalSent: number;
+  txCount: number;
+  firstSeen?: string;
+  lastSeen?: string;
+}
+
+export interface Transaction {
+  hash: string;
+  time: number;
+  value: number;
+  fee?: number;
+}
+
+export interface PriceData {
+  symbol: string; name: string; icon: string; price: number; usdprice: any; change24h: any; volume24h: any; marketCap: any;
+}
+
+
+export interface ContentData {
+  prices: PriceData[]
+  setPrices: (data: PriceData[]) => void
+  walletNetwork: string | null
+  setWalletNetwork: (data: string | null) => void
+  blockchainData: BlockchainData | null
+  setBlockchainData: (data: BlockchainData | null) => void
+  isLoading: boolean
+  setIsLoading: (data: boolean) => void
+  transactions: Transaction[]
+  setTransactions: (data: Transaction[]) => void
+  formValues: FormValues
+  setFormValues: (data: FormValues) => void
+  isOnline: boolean
+  setIsOnline: (data: boolean) => void
+  cfdata: any | any
+  setCfdata: (data: any | any) => void
+  logData: string[] | any[]
+  setLogData: (data: string[] | any[]) => void
+  isSignin: boolean
+  setIsSignin: (data: boolean) => void
+  multiTransactions: any[]
+  setMultiTransactions: (data: any[]) => void
+  state: DialogState
+  setState: (data: DialogState) => void
+  isFlashing: boolean
+  setIsFlashing: (data: boolean) => void
+}
+
+
+export interface DialogState {
+  isOpen: boolean
+  type: DialogType
+  title: string
+  message: string
+  onConfirm?: () => void
+  onCancel?: () => void
+  progress?: number
+  component?: ReactNode
+  close?: () => void
+  controls?: boolean
+}

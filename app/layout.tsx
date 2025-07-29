@@ -2,6 +2,10 @@ import type { Metadata } from "next"
 import "./globals.css"
 import localFont from 'next/font/local'
 import { DialogProvider } from "@/app/lib/dialog"
+import { Toaster } from "react-hot-toast";
+import { ContentProvider } from "./hooks/context";
+import { AuthProvider } from "./hooks/AuthContext";
+
 
 export const metadata: Metadata = {
   title: "Plutus | Crypto Receipt && Real Crypto Flasher",
@@ -39,9 +43,14 @@ export default function RootLayout({
   return (
     <html className="h-full" lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} bg-black h-full`}>
-        <DialogProvider>
-          {children}
-        </DialogProvider>
+        <Toaster />
+        <AuthProvider>
+          <ContentProvider>
+            <DialogProvider>
+              {children}
+            </DialogProvider>
+          </ContentProvider>
+        </AuthProvider>
       </body>
     </html>
   )

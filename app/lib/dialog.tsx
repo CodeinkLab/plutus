@@ -1,22 +1,12 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 'use client'
 
-import { createContext, useContext, useState, ReactNode } from 'react'
+import { createContext, useContext, ReactNode, useEffect } from 'react'
 import { XMarkIcon, CheckCircleIcon, ExclamationTriangleIcon, InformationCircleIcon } from '@heroicons/react/24/outline'
+import { DialogState } from '../utils/interfaces'
+import { useContent } from '../hooks/context'
 
-type DialogType = 'alert' | 'confirm' | 'progress' | 'component'
 
-interface DialogState {
-  isOpen: boolean
-  type: DialogType
-  title: string
-  message: string
-  onConfirm?: () => void
-  onCancel?: () => void
-  progress?: number
-  component?: ReactNode
-  close?: () => void
-}
 
 interface DialogContextType {
   showDialog: (options: Omit<DialogState, 'isOpen'>) => void
@@ -27,22 +17,19 @@ interface DialogContextType {
 const DialogContext = createContext<DialogContextType | undefined>(undefined)
 
 export function DialogProvider({ children }: { children: ReactNode }) {
-
-  const [state, setState] = useState<DialogState>({
-    isOpen: false,
-    type: 'alert',
-    title: '',
-    message: '',
-    component: null,
-  })
+  const { state, setState } = useContent()
 
   const showDialog = (options: Omit<DialogState, 'isOpen'>) => {
     setState({ ...options, isOpen: true })
   }
 
   const closeDialog = () => {
-    setState(prev => ({ ...prev, isOpen: false }))
+    setState({ ...state, isOpen: false })
   }
+
+  useEffect(() => {
+
+  }, [state.component])
 
   return (
     <DialogContext.Provider value={{ showDialog, closeDialog, state }}>
@@ -99,13 +86,17 @@ export function DialogProvider({ children }: { children: ReactNode }) {
             </div>
           </div>}
           {state.type === 'component' && <div className="bg-gray-800 rounded-lg shadow-xl max-w-md w-full p-6">
-
             <div className="flex flex-col items-start justify-between mb-2 w-full">
               <h3 className="text-lg font-semibold text-white mb-4">{state.title}</h3>
+              <button
+                onClick={closeDialog}
+                className="place-self-end text-gray-400 hover:text-gray-300">
+                <XMarkIcon className="w-5 h-5" />
+              </button>
               {state.message && <p className="text-gray-300 mb-2 text-sm break-words">{state.message}</p>}
               {state.component}
-             
-              <div className="flex w-full justify-end mt-4 gap-4">
+
+              {state.controls && <div className="flex w-full justify-end mt-4 gap-4">
                 <button
                   onClick={() => {
                     state.onCancel?.()
@@ -124,7 +115,7 @@ export function DialogProvider({ children }: { children: ReactNode }) {
                 >
                   continue
                 </button>
-              </div>
+              </div>}
             </div>
           </div>}
         </div>

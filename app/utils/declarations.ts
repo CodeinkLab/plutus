@@ -9,7 +9,7 @@ export const defaultFormValues = {
   randomDelay: false,
   minDelay: 5,
   maxDelay: 30,
-  proxyType: "noProxy", // "noProxy", "vip72", "random"
+  proxyType: "noProxy", 
   setdelay: false,
   selectedProxy: "Proxy 1",
   blockchainApi: "",

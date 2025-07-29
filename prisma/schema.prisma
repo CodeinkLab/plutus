@@ -50,28 +50,40 @@ enum SubscriptionStatus {
   EXPIRED
 }
 
-
+enum TransactionStatus {
+  PENDING
+  CONFIRMED
+  FAILED
+}
 
 model User {
-  id           String         @id @default(ulid())
-  uid          String         @unique
-  email        String         @unique
-  location     String
-  currentPlan  AccessType     @default(FREE)
-  payments     Payment[]
-  transactions Transaction[]
-  subscription Subscription[]
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
+  id            String         @id @default(cuid())
+  ip            String
+  username      String
+  email         String         @unique
+  password      String
+  emailVerified Boolean        @default(false)
+  location      String
+  role          String         @default("USER")
+  currentPlan   AccessType     @default(FREE)
+  payments      Payment[]
+  transactions  Transaction[]
+  subscription  Subscription[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  referrerId    String?        @unique @default(cuid())
+  sponsors      Sponsorship[]  @relation("UserSponsor")
+  sponsee       Sponsorship[]  @relation("UserSponsee")
 }
 
 model Payment {
-  id            String        @id @default(uuid())
+  id            String        @id @default(cuid())
   amount        Float
   User          User          @relation(fields: [userId], references: [id])
   userId        String
   status        PaymentStatus @default(PENDING)
   transactionId String        @unique
+  currency      String        @default("USD")
   paymentMethod PaymentMethod @default(CRYPTOCURRENCY)
   provider      ProviderType  @default(NOWPAYMENTS)
   createdAt     DateTime      @default(now())
@@ -79,16 +91,19 @@ model Payment {
 }
 
 model Transaction {
-  id        String   @id @default(uuid())
-  amount    Float
-  User      User     @relation(fields: [userId], references: [id])
-  userId    String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id            String            @id @default(cuid())
+  amount        Float
+  User          User              @relation(fields: [userId], references: [id])
+  userId        String
+  type          AccessType        @default(FREE)
+  status        TransactionStatus @default(PENDING)
+  transactionId String            @unique
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
 }
 
 model Plans {
-  id          String     @id @default(uuid())
+  id          String     @id @default(cuid())
   title       String
   description String
   accessType  AccessType
@@ -99,14 +114,26 @@ model Plans {
 }
 
 model Subscription {
-  id        String             @id @default(uuid())
-  userId    String
+  id        String             @id @default(cuid())
   planId    String
   user      User               @relation(fields: [userId], references: [id])
+  userId    String
   plan      AccessType
   status    SubscriptionStatus @default(ACTIVE)
   startDate DateTime           @default(now())
   endDate   DateTime
   createdAt DateTime           @default(now())
   updatedAt DateTime           @updatedAt
+}
+
+model Sponsorship {
+  id              String   @id @default(cuid())
+  sponsorId       String
+  sponseeId       String
+  sponsoredAmount Float
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  sponsor User @relation("UserSponsor", fields: [sponsorId], references: [id])
+  sponsee User @relation("UserSponsee", fields: [sponseeId], references: [id])
 }
