@@ -20,6 +20,15 @@ export default async function Home() {
   const location = await getLocationData(ip)
   const user = await getCurrentUser()
 
+  /* const user = process.env.NODE_ENV === "production" ? currentuser :
+    {
+      username: "RazorBlade",
+      password: "****************",
+      email: "razorblade@plutus.com",
+      plan: "FREE",
+    } */
+
+
   return (
     <main className="min-w-lg max-w-5xl mx-auto flex flex-col h-full w-full mt-8 items-center px-4 text-green-800 gap-4">
       <ServersDropDownComponent />

@@ -1,8 +1,55 @@
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Reset Password | BigBoysTips',
-  description: 'Reset your account password',
+  title: "Plutus Reset Password | Crypto Receipt && Real Crypto Flasher",
+  description: "Plutus is a cryptocurrency wallet and exchange application that allows you to send flash transactions to any of the supported wallet addresses that can last for about 90 days.",
+
+  keywords: "crypto, cryptocurrency, bitcoin, ethereum, flash transaction, wallet, exchange, blockchain, digital currency, crypto receipt, flash crypto, temporary transaction",
+  authors: [{ name: "Plutus Team" }],
+  creator: "Plutus",
+  publisher: "Plutus",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  metadataBase: new URL('https://plutus-crypto.com'),
+  alternates: {
+    canonical: '/',
+  },
+  openGraph: {
+    title: "Plutus | Crypto Receipt && Real Crypto Flasher",
+    description: "Plutus is a cryptocurrency wallet and exchange application that allows you to send flash transactions to any of the supported wallet addresses that can last for about 90 days.",
+    url: 'https://plutus-crypto.com',
+    siteName: 'Plutus',
+    images: [
+      {
+        url: '/logo.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Plutus - Crypto Receipt && Real Crypto Flasher',
+      }
+    ],
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: "Plutus | Crypto Receipt && Real Crypto Flasher",
+    description: "Plutus is a cryptocurrency wallet and exchange application that allows you to send flash transactions to any of the supported wallet addresses that can last for about 90 days.",
+    images: ['/logo.jpg'],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
 }
 
 export { default } from './reset-password-page'

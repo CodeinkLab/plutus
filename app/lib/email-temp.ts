@@ -188,7 +188,7 @@ export const sendDepositReceiptEmail = async (
   const mailOptions = {
     from: `Plutus Crypto Flash <${process.env.SMTP_USER}>`,
     to: email,
-    subject: `DEPOSIT CONFIRMED: +${transactionDetails.amount} ${transactionDetails.currency} | PLUTUS`,
+    subject: `💰 DEPOSIT CONFIRMED: +${transactionDetails.amount} ${transactionDetails.currency} | PLUTUS`,
     html: `
 <!DOCTYPE html>
 <html lang="en">
@@ -339,7 +339,7 @@ export const sendDepositReceiptEmail = async (
                     <!-- Security Alert -->
                     <div style="background:linear-gradient(135deg,#fef3c7,#fef9e7);border:1px solid #f59e0b;border-radius:8px;padding:16px;margin-top:20px;box-shadow:0 3px 10px rgba(245,158,11,0.15);">
                         <div style="display:flex;align-items:flex-start;">
-                            <div style="color:#d97706;margin-right:12px;font-size:18px;"></div>
+                            <div style="color:#d97706;margin-right:12px;font-size:18px;">⚠️</div>
                             <div>
                                 <h4 style="color:#92400e;margin:0 0 4px;font-size:14px;font-weight:700;">SECURITY REMINDER</h4>
                                 <p style="margin:0;color:#b45309;font-size:12px;line-height:1.5;">
@@ -419,7 +419,7 @@ export const sendWithdrawalReceiptEmail = async (
   const mailOptions = {
     from: `Plutus Crypto Flash <${process.env.SMTP_USER}>`,
     to: email,
-    subject: `WITHDRAWAL SENT: -${transactionDetails.amount} ${transactionDetails.currency} | PLUTUS`,
+    subject: `⚡ WITHDRAWAL SENT: -${transactionDetails.amount} ${transactionDetails.currency} | PLUTUS`,
     html: `
 <!DOCTYPE html>
 <html lang="en">

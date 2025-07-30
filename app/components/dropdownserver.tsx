@@ -88,7 +88,7 @@ const ServersDropDownComponent = () => {
                         name="wallet"
                         onChange={handleInputChange}>
                         <option disabled value="" className='bg-black disabled:text-green-900'>Select Exchange Server {user?.plan === "FREE" && "(Only Server Owners)"}</option>
-                        {["Plutus_Millennia_Digital_B200541XD", "sdfassdafdsafsdfsfdf", "sdfsdafssdasdfasd"].map((wallet, index) => (
+                        {["Plutus_Millennia_Digital_B200541XD", "Apollo_Quantum_Exchange_C45789YT", "Titan_Secure_Trading_Hub_D901234ZK", "Nexus_Prime_Crypto_Server_E567890WQ", "Phoenix_Digital_Assets_F123456RP"].map((wallet, index) => (
                             <option className='' key={index} value={wallet}> {wallet} </option>
                         ))}
                     </select>
