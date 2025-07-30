@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     siteName: 'Plutus',
     images: [
       {
-        url: '/logo.jpg',
+        url: 'https://plutus.uno/logo.jpg',
         width: 1200,
         height: 630,
         alt: 'Plutus - Crypto Receipt && Real Crypto Flasher',
@@ -44,7 +44,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: "Plutus | Crypto Receipt && Real Crypto Flasher",
     description: "Plutus is a cryptocurrency wallet and exchange application that allows you to send flash transactions to any of the supported wallet addresses that can last for about 90 days.",
-    images: ['/logo.jpg'],
+    images: ['https://plutus.uno/logo.jpg'],
   },
   robots: {
     index: true,
