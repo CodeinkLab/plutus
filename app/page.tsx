@@ -31,6 +31,9 @@ export default async function Home() {
 
   return (
     <main className="min-w-lg max-w-5xl mx-auto flex flex-col h-full w-full mt-8 items-center px-4 text-green-800 gap-4">
+      <div className="py-2">
+        <p className="text-red-500">Notice: System is currently undergoing maintenance. Every user has to sign up for a new account</p>
+      </div>
       <ServersDropDownComponent />
       <Address />
 
