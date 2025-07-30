@@ -75,7 +75,7 @@ export default function Pricing({ onSelectPlan }: PricingProps) {
       });
 
       // You can redirect to a payment page or show payment details in a modal
-      window.open(data.payment.paymentUrl || '/payment/success', '_blank');
+      window.open(data.payment.paymentUrl || '/payment/success');
 
     } catch (error: any) {
       console.error('Error creating payment:', error);
@@ -95,7 +95,7 @@ export default function Pricing({ onSelectPlan }: PricingProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
           <h2 className="text-3xl font-extrabold text-white sm:text-4xl">
-            Choose Your Mining Server
+            Choose Your Flashing Server
           </h2>
           <p className="mt-4 text-xl text-gray-300">
             Select the perfect server for your crypto flashing operations

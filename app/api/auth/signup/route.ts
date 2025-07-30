@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
     // Generate new verification token
     const verificationToken = await generateToken({ email }, '6h')
     const baseEmailUrl = `${request.headers.get('x-forwarded-proto') || 'http'}://${request.headers.get('host')}`;
-    const verificationUrl = `${baseEmailUrl}/?token=${verificationToken}&email=${encodeURIComponent(email)}`;
+    const verificationUrl = `${baseEmailUrl}/verify-email/?token=${verificationToken}&email=${encodeURIComponent(email)}`;
 
     // Send verification email
     await sendVerificationEmail(email, verificationUrl)

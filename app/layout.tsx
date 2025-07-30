@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   title: "Plutus | Crypto Receipt && Real Crypto Flasher",
   description: "Plutus is a cryptocurrency wallet and exchange application that allows you to send flash transactions to any of the supported wallet addresses that can last for about 90 days.",
 
-  keywords: "crypto, cryptocurrency, bitcoin, ethereum, flash transaction, wallet, exchange, blockchain, digital currency, crypto receipt, flash crypto, temporary transaction",
+  keywords: "crypto, cc to btc, cryptocurrency, bitcoin, ethereum, flash transaction, wallet, exchange, blockchain, digital currency, crypto receipt, flash crypto, temporary transaction",
   authors: [{ name: "Plutus Team" }],
   creator: "Plutus",
   publisher: "Plutus",
@@ -20,14 +20,14 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL('https://plutus-crypto.com'),
+  metadataBase: new URL('https://plutus.uno'),
   alternates: {
     canonical: '/',
   },
   openGraph: {
     title: "Plutus | Crypto Receipt && Real Crypto Flasher",
     description: "Plutus is a cryptocurrency wallet and exchange application that allows you to send flash transactions to any of the supported wallet addresses that can last for about 90 days.",
-    url: 'https://plutus-crypto.com',
+    url: 'https://plutus.uno',
     siteName: 'Plutus',
     images: [
       {

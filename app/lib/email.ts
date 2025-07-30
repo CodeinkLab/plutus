@@ -172,204 +172,419 @@ export const sendDepositReceiptEmail = async (
     });
   };
 
-  const getExplorerUrl = (hash: string, network: string) => {
-    const explorers: { [key: string]: string } = {
-      'BTC': `https://blockstream.info/tx/${hash}`,
-      'ETH': `https://etherscan.io/tx/${hash}`,
-      'USDT': `https://etherscan.io/tx/${hash}`,
-      'LTC': `https://blockchair.com/litecoin/transaction/${hash}`,
-      'BCH': `https://blockchair.com/bitcoin-cash/transaction/${hash}`,
-      'TRON': `https://tronscan.org/#/transaction/${hash}`,
-      'TRX': `https://tronscan.org/#/transaction/${hash}`
-    };
-    return explorers[network] || `https://blockchair.com/search?q=${hash}`;
-  };
+ 
 
   const mailOptions = {
     from: `Plutus Crypto Flash <${process.env.SMTP_USER}>`,
     to: email,
     subject: `DEPOSIT CONFIRMED: +${transactionDetails.amount} ${transactionDetails.currency} | PLUTUS`,
-    html: `
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Deposit Confirmed - PLUTUS</title>
+    html: `<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Deposit Receipt - Plutus</title>
     <!--[if mso]>
     <noscript>
-        <xml>
-            <o:OfficeDocumentSettings>
-                <o:PixelsPerInch>96</o:PixelsPerInch>
-            </o:OfficeDocumentSettings>
-        </xml>
+      <xml>
+        <o:OfficeDocumentSettings>
+          <o:PixelsPerInch>96</o:PixelsPerInch>
+        </o:OfficeDocumentSettings>
+      </xml>
     </noscript>
     <![endif]-->
-</head>
-<body style="margin:0;padding:0;background:#0a0a0a;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
-    
-    <!-- Preheader -->
-    <div style="display:none;font-size:1px;color:#0a0a0a;line-height:1px;max-height:0;max-width:0;opacity:0;overflow:hidden;">
-        Your deposit of ${transactionDetails.amount} ${transactionDetails.currency} has been successfully processed and confirmed on the ${transactionDetails.network} network.
-    </div>
-
-    <!-- Main Container -->
-    <div style="width:100%;background:#0a0a0a;padding:40px 0;">
-        <div style="max-width:600px;margin:0 auto;background:#0a0a0a;">
-            
-            <!-- Header -->
-            <div style="text-align:center;padding:0 20px 40px;">
-                <div style="display:inline-block;background:linear-gradient(45deg,#10b981,#059669);padding:16px;border-radius:50%;margin-bottom:20px;box-shadow:0 8px 32px rgba(16,185,129,0.4);">
-                    <svg width="40" height="40" fill="white" viewBox="0 0 24 24">
-                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                    </svg>
-                </div>
-                <h1 style="color:#ffffff;font-size:28px;font-weight:800;margin:0;letter-spacing:-0.5px;">PLUTUS</h1>
-                <p style="color:#6b7280;margin:8px 0 0;font-size:14px;text-transform:uppercase;letter-spacing:2px;font-weight:600;">CRYPTO FLASH SYSTEM</p>
-            </div>
-
-            <!-- Main Card -->
-            <div style="margin:0 20px;background:#ffffff;border-radius:20px;overflow:hidden;box-shadow:0 25px 60px rgba(0,0,0,0.8);">
-                
-                <!-- Status Header -->
-                <div style="background:linear-gradient(135deg,#10b981 0%,#059669 100%);padding:40px 30px;text-align:center;position:relative;">
-                    <div style="position:absolute;top:0;left:0;right:0;bottom:0;background:url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGRlZnM+CjxwYXR0ZXJuIGlkPSJncmlkIiB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiPgo8cGF0aCBkPSJNIDYwIDAgTCAwIDAgMCA2MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSIwLjUiIG9wYWNpdHk9IjAuMSIvPgo8L3BhdHRlcm4+CjwvZGVmcz4KPHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPgo8L3N2Zz4=');opacity:0.3;"></div>
-                    
-                    <div style="position:relative;z-index:2;">
-                        <div style="background:rgba(255,255,255,0.2);width:80px;height:80px;border-radius:50%;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(10px);">
-                            <svg width="40" height="40" fill="white" viewBox="0 0 24 24">
-                                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-                            </svg>
-                        </div>
-                        <h2 style="color:white;font-size:32px;font-weight:900;margin:0 0 8px;text-shadow:0 2px 4px rgba(0,0,0,0.3);">DEPOSIT CONFIRMED</h2>
-                        <p style="color:rgba(255,255,255,0.9);margin:0;font-size:16px;font-weight:500;">Successfully processed on ${transactionDetails.network} network</p>
-                        
-                        <div style="margin-top:24px;">
-                            <span style="background:rgba(255,255,255,0.25);color:white;padding:8px 20px;border-radius:20px;font-size:12px;font-weight:700;text-transform:uppercase;backdrop-filter:blur(10px);">
-                                ✓ ${transactionDetails.status}
-                            </span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Amount Section -->
-                <div style="padding:0;background:linear-gradient(180deg,#f0fdf4 0%,#ffffff 100%);">
-                    <div style="padding:40px 30px;text-align:center;">
-                        <div style="background:linear-gradient(135deg,#dcfce7,#f0fdf4);border:3px solid #10b981;border-radius:16px;padding:32px;position:relative;overflow:hidden;box-shadow:0 10px 25px rgba(16,185,129,0.15);">
-                            <!-- Animated Corner -->
-                            <div style="position:absolute;top:12px;right:12px;width:8px;height:8px;background:#10b981;border-radius:50%;"></div>
-                            
-                            <div style="font-size:56px;font-weight:900;color:#059669;margin-bottom:8px;line-height:1;">
-                                +${parseFloat(transactionDetails.amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 8 })}
-                            </div>
-                            <div style="font-size:28px;color:#047857;font-weight:800;letter-spacing:2px;margin-bottom:16px;">
-                                ${transactionDetails.currency}
-                            </div>
-                            <div style="background:rgba(5,150,105,0.1);color:#047857;padding:8px 16px;border-radius:8px;font-size:13px;font-weight:700;display:inline-block;">
-                                INSTANT SETTLEMENT
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Transaction Details -->
-                <div style="padding:0 30px 40px;background:white;">
-                    <div style="background:#f9fafb;border-radius:12px;padding:24px;border:1px solid #e5e7eb;box-shadow:0 4px 15px rgba(0,0,0,0.05);">
-                        <h3 style="color:#111827;margin:0 0 24px;font-size:18px;font-weight:800;display:flex;align-items:center;">
-                            <span style="background:linear-gradient(45deg,#10b981,#059669);width:4px;height:20px;border-radius:2px;margin-right:12px;"></span>
-                            TRANSACTION DETAILS
-                        </h3>
-                        
-                        <div style="background:white;border-radius:8px;overflow:hidden;border:1px solid #e5e7eb;">
-                            <table style="width:100%;border-collapse:collapse;">
-                                <tr style="border-bottom:1px solid #f3f4f6;">
-                                    <td style="padding:16px;color:#6b7280;font-size:13px;font-weight:600;width:120px;vertical-align:top;">TXN ID</td>
-                                    <td style="padding:16px;color:#111827;font-size:13px;font-family:'SF Mono',Monaco,monospace;font-weight:600;word-break:break-all;">${transactionDetails.transactionId}</td>
-                                </tr>
-                                <tr style="border-bottom:1px solid #f3f4f6;">
-                                    <td style="padding:16px;color:#6b7280;font-size:13px;font-weight:600;vertical-align:top;">HASH</td>
-                                    <td style="padding:16px;color:#111827;font-size:13px;font-family:'SF Mono',Monaco,monospace;font-weight:600;word-break:break-all;">
-                                        <a href="${getExplorerUrl(transactionDetails.transactionHash, transactionDetails.network)}" target="_blank" style="color:#059669;text-decoration:none;border-bottom:1px solid #10b981;transition:all 0.2s;">
-                                            ${transactionDetails.transactionHash}
-                                        </a>
-                                    </td>
-                                </tr>
-                                <tr style="border-bottom:1px solid #f3f4f6;">
-                                    <td style="padding:16px;color:#6b7280;font-size:13px;font-weight:600;">DATE</td>
-                                    <td style="padding:16px;color:#111827;font-size:13px;font-weight:600;">${formatDate(transactionDetails.timestamp)}</td>
-                                </tr>
-                                <tr style="border-bottom:1px solid #f3f4f6;">
-                                    <td style="padding:16px;color:#6b7280;font-size:13px;font-weight:600;">NETWORK</td>
-                                    <td style="padding:16px;">
-                                        <span style="background:#10b981;color:white;padding:4px 12px;border-radius:6px;font-size:11px;font-weight:700;">${transactionDetails.network}</span>
-                                    </td>
-                                </tr>
-                                <tr style="border-bottom:1px solid #f3f4f6;">
-                                    <td style="padding:16px;color:#6b7280;font-size:13px;font-weight:600;vertical-align:top;">FROM</td>
-                                    <td style="padding:16px;">
-                                        <div style="background:#f9fafb;padding:8px;border-radius:6px;font-family:'SF Mono',Monaco,monospace;font-size:12px;color:#374151;word-break:break-all;border:1px solid #e5e7eb;">
-                                            ${transactionDetails.fromAddress}
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr style="border-bottom:1px solid #f3f4f6;">
-                                    <td style="padding:16px;color:#6b7280;font-size:13px;font-weight:600;vertical-align:top;">TO</td>
-                                    <td style="padding:16px;">
-                                        <div style="background:#f0fdf4;padding:8px;border-radius:6px;font-family:'SF Mono',Monaco,monospace;font-size:12px;color:#374151;word-break:break-all;border:1px solid #dcfce7;">
-                                            ${transactionDetails.toAddress}
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="padding:16px;color:#6b7280;font-size:13px;font-weight:600;">STATUS</td>
-                                    <td style="padding:16px;">
-                                        <span style="background:#10b981;color:white;padding:4px 12px;border-radius:6px;font-size:11px;font-weight:700;">${transactionDetails.confirmations}/6 CONFIRMED</span>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-
-                        <div style="text-align:center;margin-top:24px;">
-                            <a href="${getExplorerUrl(transactionDetails.transactionHash, transactionDetails.network)}" target="_blank" style="display:inline-block;background:linear-gradient(135deg,#10b981,#059669);color:white;padding:14px 28px;text-decoration:none;border-radius:8px;font-weight:700;font-size:13px;box-shadow:0 4px 14px rgba(16,185,129,0.4);transition:all 0.2s;">
-                                🔍 VIEW ON BLOCKCHAIN
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Security Alert -->
-                    <div style="background:linear-gradient(135deg,#fef3c7,#fef9e7);border:1px solid #f59e0b;border-radius:8px;padding:16px;margin-top:20px;box-shadow:0 3px 10px rgba(245,158,11,0.15);">
-                        <div style="display:flex;align-items:flex-start;">
-                            <div style="color:#d97706;margin-right:12px;font-size:18px;"></div>
-                            <div>
-                                <h4 style="color:#92400e;margin:0 0 4px;font-size:14px;font-weight:700;">SECURITY REMINDER</h4>
-                                <p style="margin:0;color:#b45309;font-size:12px;line-height:1.5;">
-                                    Always verify transactions on the blockchain explorer. Keep this receipt secure. Never share private keys.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Footer -->
-            <div style="text-align:center;padding:40px 20px 0;">
-                <div style="background:rgba(255,255,255,0.05);backdrop-filter:blur(10px);border-radius:12px;padding:24px;border:1px solid rgba(255,255,255,0.1);">
-                    <p style="color:#9ca3af;font-size:13px;margin:0 0 12px;font-weight:500;">
-                        Powered by <strong style="color:#10b981;">PLUTUS</strong> • Advanced Crypto Flash Technology
-                    </p>
-                    <div style="border-top:1px solid rgba(255,255,255,0.1);padding-top:12px;">
-                        <p style="color:#6b7280;font-size:11px;margin:0;line-height:1.4;">
-                            © ${new Date().getFullYear()} Plutus. All rights reserved. | ID: ${transactionDetails.transactionId}<br>
-                            This is an automated message. Do not reply to this email.
-                        </p>
-                    </div>
-                </div>
-            </div>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, Arial, sans-serif;
+        line-height: 1.6;
+        margin: 0;
+        padding: 20px 0;
+        min-height: 100vh;
+      }
+      .email-wrapper {
+        max-width: 600px;
+        margin: 0 auto;
+        background-color: transparent;
+        padding: 20px;
+      }
+      .header {
+        background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+        color: white;
+        text-align: center;
+        padding: 25px 20px;
+        border-radius: 12px 12px 0 0;
+        border-bottom: 3px solid #10b981;
+      }
+      .logo {
+        width: 80px;
+        height: 80px;
+        margin: 0 auto 15px;
+        border-radius: 50%;
+        background: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+      }
+      .logo img {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+      }
+      .header h1 {
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 5px;
+        color: #fff;
+      }
+      .header p {
+        font-size: 14px;
+        color: #d1d5db;
+        margin: 0;
+      }
+      .main-card {
+        background: white;
+        padding: 0;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      }
+      .status-section {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: white;
+        text-align: center;
+        padding: 30px 20px;
+      }
+      .status-icon {
+        width: 60px;
+        height: 60px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        margin: 0 auto 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+      }
+      .status-title {
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 8px;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      .status-subtitle {
+        font-size: 16px;
+        opacity: 0.9;
+        margin-bottom: 20px;
+      }
+      .amount-display {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        padding: 15px;
+        margin-top: 15px;
+      }
+      .amount-value {
+        font-size: 32px;
+        font-weight: 800;
+        margin-bottom: 5px;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      .amount-network {
+        font-size: 14px;
+        opacity: 0.8;
+      }
+      .details-section {
+        padding: 30px 20px;
+        background: white;
+      }
+      .detail-row {
+        display: table;
+        width: 100%;
+        margin-bottom: 15px;
+        border-bottom: 1px solid #f3f4f6;
+        padding-bottom: 15px;
+      }
+      .detail-row:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+        padding-bottom: 0;
+      }
+      .detail-label {
+        display: table-cell;
+        width: 40%;
+        font-weight: 600;
+        color: #374151;
+        font-size: 14px;
+        vertical-align: top;
+        padding-right: 15px;
+      }
+      .detail-value {
+        display: table-cell;
+        width: 60%;
+        color: #1f2937;
+        font-size: 14px;
+        word-break: break-all;
+        vertical-align: top;
+      }
+      .hash-link {
+        color: #10b981;
+        text-decoration: none;
+        font-weight: 600;
+      }
+      .hash-link:hover {
+        text-decoration: underline;
+      }
+      .status-badge {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+      .status-completed {
+        background: #d1fae5;
+        color: #065f46;
+      }
+      .status-pending {
+        background: #fef3c7;
+        color: #92400e;
+      }
+      .status-failed {
+        background: #fecaca;
+        color: #991b1b;
+      }
+      .action-buttons {
+        text-align: center;
+        padding: 25px 20px;
+        background: #f9fafb;
+      }
+      .btn {
+        display: inline-block;
+        padding: 12px 24px;
+        margin: 0 8px;
+        text-decoration: none;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 14px;
+        transition: all 0.2s ease;
+        border: none;
+        cursor: pointer;
+      }
+      .btn-primary {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: white;
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+      }
+      .btn-primary:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
+      }
+      .btn-secondary {
+        background: white;
+        color: #374151;
+        border: 2px solid #d1d5db;
+      }
+      .btn-secondary:hover {
+        border-color: #10b981;
+        color: #10b981;
+      }
+      .security-notice {
+        background: #fffbeb;
+        border: 1px solid #fbbf24;
+        border-radius: 8px;
+        padding: 15px;
+        margin: 20px;
+        text-align: center;
+      }
+      .security-notice-icon {
+        color: #f59e0b;
+        font-size: 20px;
+        margin-bottom: 8px;
+      }
+      .security-notice-text {
+        font-size: 13px;
+        color: #92400e;
+        line-height: 1.5;
+      }
+      .footer {
+        background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+        color: #d1d5db;
+        text-align: center;
+        padding: 30px 20px;
+        border-radius: 0 0 12px 12px;
+        margin-top: 0;
+      }
+      .footer-links {
+        margin-bottom: 20px;
+      }
+      .footer-link {
+        color: #10b981;
+        text-decoration: none;
+        margin: 0 15px;
+        font-size: 14px;
+        font-weight: 500;
+      }
+      .footer-link:hover {
+        text-decoration: underline;
+      }
+      .social-links {
+        margin: 20px 0;
+      }
+      .social-link {
+        display: inline-block;
+        width: 36px;
+        height: 36px;
+        background: rgba(16, 185, 129, 0.1);
+        border-radius: 50%;
+        margin: 0 8px;
+        text-decoration: none;
+        line-height: 36px;
+        color: #10b981;
+        font-size: 16px;
+        transition: all 0.2s ease;
+      }
+      .social-link:hover {
+        background: #10b981;
+        color: white;
+        transform: translateY(-1px);
+      }
+      .footer-text {
+        font-size: 12px;
+        color: #9ca3af;
+        line-height: 1.5;
+        margin-top: 15px;
+      }
+      @media only screen and (max-width: 600px) {
+        .email-wrapper {
+          margin: 0;
+          padding: 10px;
+        }
+        .detail-label,
+        .detail-value {
+          display: block;
+          width: 100%;
+          padding: 0;
+        }
+        .detail-label {
+          margin-bottom: 5px;
+          font-weight: 700;
+        }
+        .btn {
+          display: block;
+          margin: 8px 0;
+          width: 100%;
+        }
+        .amount-value {
+          font-size: 24px;
+        }
+        .status-title {
+          font-size: 24px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="email-wrapper">
+      <!-- Header -->
+      
+      <!-- Main Card -->
+      <div class="main-card">
+        <!-- Status Section -->
+        <div class="status-section">
+          <div class="status-icon">√</div>
+          <div class="status-title">Deposit Received</div>
+          <div class="status-subtitle">Your cryptocurrency deposit has been successfully processed</div>
+          
+          <div class="amount-display">
+            <div class="amount-value">+${transactionDetails.amount} ${transactionDetails.currency}</div>
+            <div class="amount-network">${transactionDetails.network} Network</div>
+          </div>
         </div>
+
+        <!-- Transaction Details -->
+        <div class="details-section">
+          <div class="detail-row">
+            <div class="detail-label">Transaction ID:</div>
+            <div class="detail-value">${transactionDetails.transactionId}</div>
+          </div>
+          
+          <div class="detail-row">
+            <div class="detail-label">Transaction Hash:</div>
+            <div class="detail-value">
+              <a href="${transactionDetails.transactionHash}" 
+                 class="hash-link" target="_blank">${transactionDetails.transactionHash}</a>
+            </div>
+          </div>
+          
+          <div class="detail-row">
+            <div class="detail-label">Date & Time:</div>
+            <div class="detail-value">${formatDate(transactionDetails.timestamp)}</div>
+          </div>
+          
+          <div class="detail-row">
+            <div class="detail-label">From Address:</div>
+            <div class="detail-value">${transactionDetails.fromAddress}</div>
+          </div>
+          
+          <div class="detail-row">
+            <div class="detail-label">To Address:</div>
+            <div class="detail-value">${transactionDetails.toAddress}</div>
+          </div>
+          
+          <div class="detail-row">
+            <div class="detail-label">Network:</div>
+            <div class="detail-value">${transactionDetails.network}</div>
+          </div>
+          
+          <div class="detail-row">
+            <div class="detail-label">Confirmations:</div>
+            <div class="detail-value">${transactionDetails.confirmations}</div>
+          </div>
+          
+          <div class="detail-row">
+            <div class="detail-label">Status:</div>
+            <div class="detail-value">
+              <span class="status-badge status-${transactionDetails.status}">${transactionDetails.status}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+          <a href="${transactionDetails.transactionHash}" 
+             class="btn btn-primary" target="_blank">View on Blockchain</a>
+          <a href="https://plutus.uno/" class="btn btn-secondary">Transaction History</a>
+        </div>
+
+        <!-- Security Notice -->
+        <div class="security-notice">
+          <div class="security-notice-icon">⚠</div>
+          <div class="security-notice-text">
+            <strong>Security Reminder:</strong> Always verify transaction details on the blockchain explorer. 
+            Plutus will never ask for your private keys or passwords via email.
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="footer">
+                
+        <div class="footer-text">
+          © ${new Date().getFullYear()} Plutus Crypto Flash. All rights reserved.<br>
+          This email was sent to ${email}. If you didn't make this transaction, please contact support immediately.<br>
+          <strong>Transaction processed at:</strong> ${formatDate(transactionDetails.timestamp)}
+        </div>
+      </div>
     </div>
-</body>
+  </body>
 </html>
-    `,
+`,
   }
 
   const res = await transporter.sendMail(mailOptions)
@@ -420,188 +635,439 @@ export const sendWithdrawalReceiptEmail = async (
     from: `Plutus Crypto Flash <${process.env.SMTP_USER}>`,
     to: email,
     subject: `WITHDRAWAL SENT: -${transactionDetails.amount} ${transactionDetails.currency} | PLUTUS`,
-    html: `
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Withdrawal Processed - PLUTUS</title>
+    html: `<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Withdrawal Receipt - Plutus</title>
     <!--[if mso]>
     <noscript>
-        <xml>
-            <o:OfficeDocumentSettings>
-                <o:PixelsPerInch>96</o:PixelsPerInch>
-            </o:OfficeDocumentSettings>
-        </xml>
+      <xml>
+        <o:OfficeDocumentSettings>
+          <o:PixelsPerInch>96</o:PixelsPerInch>
+        </o:OfficeDocumentSettings>
+      </xml>
     </noscript>
     <![endif]-->
-</head>
-<body style="margin:0;padding:0;background:#0a0a0a;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
-    
-    <!-- Preheader -->
-    <div style="display:none;font-size:1px;color:#0a0a0a;line-height:1px;max-height:0;max-width:0;opacity:0;overflow:hidden;">
-        Your withdrawal of ${transactionDetails.amount} ${transactionDetails.currency} has been successfully processed and broadcast to the ${transactionDetails.network} network.
-    </div>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        background: linear-gradient(135deg, #6b7280 0%, #374151 100%);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, Arial, sans-serif;
+        line-height: 1.6;
+        margin: 0;
+        padding: 20px 0;
+        min-height: 100vh;
+      }
+      .email-wrapper {
+        max-width: 600px;
+        margin: 0 auto;
+        background-color: transparent;
+        padding: 20px;
+      }
+      .header {
+        background: linear-gradient(135deg, #111827 0%, #000000 100%);
+        color: white;
+        text-align: center;
+        padding: 25px 20px;
+        border-radius: 12px 12px 0 0;
+        border-bottom: 3px solid #6b7280;
+      }
+      .logo {
+        width: 80px;
+        height: 80px;
+        margin: 0 auto 15px;
+        border-radius: 50%;
+        background: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 12px rgba(107, 114, 128, 0.3);
+      }
+      .logo img {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+      }
+      .header h1 {
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 5px;
+        color: #fff;
+      }
+      .header p {
+        font-size: 14px;
+        color: #d1d5db;
+        margin: 0;
+      }
+      .main-card {
+        background: white;
+        padding: 0;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      }
+      .status-section {
+        background: linear-gradient(135deg, #6b7280 0%, #374151 100%);
+        color: white;
+        text-align: center;
+        padding: 30px 20px;
+      }
+      .status-icon {
+        width: 60px;
+        height: 60px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        margin: 0 auto 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+      }
+      .status-title {
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 8px;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      .status-subtitle {
+        font-size: 16px;
+        opacity: 0.9;
+        margin-bottom: 20px;
+      }
+      .amount-display {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        padding: 15px;
+        margin-top: 15px;
+      }
+      .amount-value {
+        font-size: 32px;
+        font-weight: 800;
+        margin-bottom: 5px;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      .amount-network {
+        font-size: 14px;
+        opacity: 0.8;
+      }
+      .fee-display {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 6px;
+        padding: 10px;
+        margin-top: 10px;
+        font-size: 14px;
+        opacity: 0.9;
+      }
+      .details-section {
+        padding: 30px 20px;
+        background: white;
+      }
+      .detail-row {
+        display: table;
+        width: 100%;
+        margin-bottom: 15px;
+        border-bottom: 1px solid #f3f4f6;
+        padding-bottom: 15px;
+      }
+      .detail-row:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+        padding-bottom: 0;
+      }
+      .detail-label {
+        display: table-cell;
+        width: 40%;
+        font-weight: 600;
+        color: #374151;
+        font-size: 14px;
+        vertical-align: top;
+        padding-right: 15px;
+      }
+      .detail-value {
+        display: table-cell;
+        width: 60%;
+        color: #1f2937;
+        font-size: 14px;
+        word-break: break-all;
+        vertical-align: top;
+      }
+      .hash-link {
+        color: #6b7280;
+        text-decoration: none;
+        font-weight: 600;
+      }
+      .hash-link:hover {
+        text-decoration: underline;
+      }
+      .status-badge {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+      .status-completed {
+        background: #d1fae5;
+        color: #065f46;
+      }
+      .status-pending {
+        background: #fef3c7;
+        color: #92400e;
+      }
+      .status-failed {
+        background: #fecaca;
+        color: #991b1b;
+      }
+      .action-buttons {
+        text-align: center;
+        padding: 25px 20px;
+        background: #f9fafb;
+      }
+      .btn {
+        display: inline-block;
+        padding: 12px 24px;
+        margin: 0 8px;
+        text-decoration: none;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 14px;
+        transition: all 0.2s ease;
+        border: none;
+        cursor: pointer;
+      }
+      .btn-primary {
+        background: linear-gradient(135deg, #6b7280 0%, #374151 100%);
+        color: white;
+        box-shadow: 0 4px 12px rgba(107, 114, 128, 0.3);
+      }
+      .btn-primary:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 16px rgba(107, 114, 128, 0.4);
+      }
+      .btn-secondary {
+        background: white;
+        color: #374151;
+        border: 2px solid #d1d5db;
+      }
+      .btn-secondary:hover {
+        border-color: #6b7280;
+        color: #6b7280;
+      }
+      .tracking-notice {
+        background: #f3f4f6;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        padding: 15px;
+        margin: 20px;
+        text-align: center;
+      }
+      .tracking-notice-icon {
+        color: #6b7280;
+        font-size: 20px;
+        margin-bottom: 8px;
+      }
+      .tracking-notice-text {
+        font-size: 13px;
+        color: #374151;
+        line-height: 1.5;
+      }
+      .estimated-arrival {
+        background: #eff6ff;
+        border: 1px solid #93c5fd;
+        border-radius: 8px;
+        padding: 12px;
+        margin: 15px 0;
+        text-align: center;
+      }
+      .estimated-arrival-text {
+        font-size: 13px;
+        color: #1e40af;
+        font-weight: 600;
+      }
+      .footer {
+        background: linear-gradient(135deg, #111827 0%, #000000 100%);
+        color: #d1d5db;
+        text-align: center;
+        padding: 30px 20px;
+        border-radius: 0 0 12px 12px;
+        margin-top: 0;
+      }
+      .footer-links {
+        margin-bottom: 20px;
+      }
+      .footer-link {
+        color: #6b7280;
+        text-decoration: none;
+        margin: 0 15px;
+        font-size: 14px;
+        font-weight: 500;
+      }
+      .footer-link:hover {
+        text-decoration: underline;
+        color: #9ca3af;
+      }
+      .social-links {
+        margin: 20px 0;
+      }
+      .social-link {
+        display: inline-block;
+        width: 36px;
+        height: 36px;
+        background: rgba(107, 114, 128, 0.1);
+        border-radius: 50%;
+        margin: 0 8px;
+        text-decoration: none;
+        line-height: 36px;
+        color: #6b7280;
+        font-size: 16px;
+        transition: all 0.2s ease;
+      }
+      .social-link:hover {
+        background: #6b7280;
+        color: white;
+        transform: translateY(-1px);
+      }
+      .footer-text {
+        font-size: 12px;
+        color: #9ca3af;
+        line-height: 1.5;
+        margin-top: 15px;
+      }
+      @media only screen and (max-width: 600px) {
+        .email-wrapper {
+          margin: 0;
+          padding: 10px;
+        }
+        .detail-label,
+        .detail-value {
+          display: block;
+          width: 100%;
+          padding: 0;
+        }
+        .detail-label {
+          margin-bottom: 5px;
+          font-weight: 700;
+        }
+        .btn {
+          display: block;
+          margin: 8px 0;
+          width: 100%;
+        }
+        .amount-value {
+          font-size: 24px;
+        }
+        .status-title {
+          font-size: 24px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="email-wrapper">
+      <!-- Header -->
 
-    <!-- Main Container -->
-    <div style="width:100%;background:#0a0a0a;padding:40px 0;">
-        <div style="max-width:600px;margin:0 auto;background:#0a0a0a;">
-            
-            <!-- Header -->
-            <div style="text-align:center;padding:0 20px 40px;">
-                <div style="display:inline-block;background:linear-gradient(45deg,#ef4444,#dc2626);padding:16px;border-radius:50%;margin-bottom:20px;box-shadow:0 8px 32px rgba(239,68,68,0.4);">
-                    <svg width="40" height="40" fill="white" viewBox="0 0 24 24">
-                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                    </svg>
-                </div>
-                <h1 style="color:#ffffff;font-size:28px;font-weight:800;margin:0;letter-spacing:-0.5px;">PLUTUS</h1>
-                <p style="color:#6b7280;margin:8px 0 0;font-size:14px;text-transform:uppercase;letter-spacing:2px;font-weight:600;">CRYPTO FLASH SYSTEM</p>
-            </div>
-
-            <!-- Main Card -->
-            <div style="margin:0 20px;background:#ffffff;border-radius:20px;overflow:hidden;box-shadow:0 25px 60px rgba(0,0,0,0.8);">
-                
-                <!-- Status Header -->
-                <div style="background:linear-gradient(135deg,#ef4444 0%,#dc2626 100%);padding:40px 30px;text-align:center;position:relative;">
-                    <div style="position:absolute;top:0;left:0;right:0;bottom:0;background:url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGRlZnM+CjxwYXR0ZXJuIGlkPSJncmlkIiB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiPgo8cGF0aCBkPSJNIDYwIDAgTCAwIDAgMCA2MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSIwLjUiIG9wYWNpdHk9IjAuMSIvPgo8L3BhdHRlcm4+CjwvZGVmcz4KPHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPgo8L3N2Zz4=');opacity:0.3;"></div>
-                    
-                    <div style="position:relative;z-index:2;">
-                        <div style="background:rgba(255,255,255,0.2);width:80px;height:80px;border-radius:50%;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(10px);">
-                            <svg width="40" height="40" fill="white" viewBox="0 0 24 24">
-                                <path d="M7,14L12,9L17,14H7Z"/>
-                                <path d="M19,3H5C3.89,3 3,3.89 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.89 20.1,3 19,3M19,19H5V5H19V19Z"/>
-                            </svg>
-                        </div>
-                        <h2 style="color:white;font-size:32px;font-weight:900;margin:0 0 8px;text-shadow:0 2px 4px rgba(0,0,0,0.3);">WITHDRAWAL SENT</h2>
-                        <p style="color:rgba(255,255,255,0.9);margin:0;font-size:16px;font-weight:500;">Successfully broadcast to ${transactionDetails.network} network</p>
-                        
-                        <div style="margin-top:24px;">
-                            <span style="background:rgba(255,255,255,0.25);color:white;padding:8px 20px;border-radius:20px;font-size:12px;font-weight:700;text-transform:uppercase;backdrop-filter:blur(10px);">
-                                ✓ ${transactionDetails.status}
-                            </span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Amount Section -->
-                <div style="padding:0;background:linear-gradient(180deg,#fef2f2 0%,#ffffff 100%);">
-                    <div style="padding:40px 30px;text-align:center;">
-                        <div style="background:linear-gradient(135deg,#fecaca,#fef2f2);border:3px solid #ef4444;border-radius:16px;padding:32px;position:relative;overflow:hidden;box-shadow:0 10px 25px rgba(239,68,68,0.15);">
-                            <!-- Animated Corner -->
-                            <div style="position:absolute;top:12px;right:12px;width:8px;height:8px;background:#ef4444;border-radius:50%;"></div>
-                            
-                            <div style="font-size:56px;font-weight:900;color:#dc2626;margin-bottom:8px;line-height:1;">
-                                -${parseFloat(transactionDetails.amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 8 })}
-                            </div>
-                            <div style="font-size:28px;color:#b91c1c;font-weight:800;letter-spacing:2px;margin-bottom:16px;">
-                                ${transactionDetails.currency}
-                            </div>
-                            <div style="background:rgba(220,38,38,0.1);color:#b91c1c;padding:8px 16px;border-radius:8px;font-size:13px;font-weight:700;display:inline-block;">
-                                ${transactionDetails.estimatedArrival ? `ETA: ${transactionDetails.estimatedArrival}` : 'PROCESSING...'}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Transaction Details -->
-                <div style="padding:0 30px 40px;background:white;">
-                    <div style="background:#f9fafb;border-radius:12px;padding:24px;border:1px solid #e5e7eb;box-shadow:0 4px 15px rgba(0,0,0,0.05);">
-                        <h3 style="color:#111827;margin:0 0 24px;font-size:18px;font-weight:800;display:flex;align-items:center;">
-                            <span style="background:linear-gradient(45deg,#ef4444,#dc2626);width:4px;height:20px;border-radius:2px;margin-right:12px;"></span>
-                            TRANSACTION DETAILS
-                        </h3>
-                        
-                        <div style="background:white;border-radius:8px;overflow:hidden;border:1px solid #e5e7eb;">
-                            <table style="width:100%;border-collapse:collapse;">
-                                <tr style="border-bottom:1px solid #f3f4f6;">
-                                    <td style="padding:16px;color:#6b7280;font-size:13px;font-weight:600;width:120px;vertical-align:top;">TXN ID</td>
-                                    <td style="padding:16px;color:#111827;font-size:13px;font-family:'SF Mono',Monaco,monospace;font-weight:600;word-break:break-all;">${transactionDetails.transactionId}</td>
-                                </tr>
-                                <tr style="border-bottom:1px solid #f3f4f6;">
-                                    <td style="padding:16px;color:#6b7280;font-size:13px;font-weight:600;vertical-align:top;">HASH</td>
-                                    <td style="padding:16px;color:#111827;font-size:13px;font-family:'SF Mono',Monaco,monospace;font-weight:600;word-break:break-all;">
-                                        <a href="${getExplorerUrl(transactionDetails.transactionHash, transactionDetails.network)}" target="_blank" style="color:#dc2626;text-decoration:none;border-bottom:1px solid #ef4444;transition:all 0.2s;">
-                                            ${transactionDetails.transactionHash}
-                                        </a>
-                                    </td>
-                                </tr>
-                                <tr style="border-bottom:1px solid #f3f4f6;">
-                                    <td style="padding:16px;color:#6b7280;font-size:13px;font-weight:600;">DATE</td>
-                                    <td style="padding:16px;color:#111827;font-size:13px;font-weight:600;">${formatDate(transactionDetails.timestamp)}</td>
-                                </tr>
-                                <tr style="border-bottom:1px solid #f3f4f6;">
-                                    <td style="padding:16px;color:#6b7280;font-size:13px;font-weight:600;">NETWORK</td>
-                                    <td style="padding:16px;">
-                                        <span style="background:#ef4444;color:white;padding:4px 12px;border-radius:6px;font-size:11px;font-weight:700;">${transactionDetails.network}</span>
-                                    </td>
-                                </tr>
-                                <tr style="border-bottom:1px solid #f3f4f6;">
-                                    <td style="padding:16px;color:#6b7280;font-size:13px;font-weight:600;vertical-align:top;">FROM</td>
-                                    <td style="padding:16px;">
-                                        <div style="background:#fef2f2;padding:8px;border-radius:6px;font-family:'SF Mono',Monaco,monospace;font-size:12px;color:#374151;word-break:break-all;border:1px solid #fecaca;">
-                                            ${transactionDetails.fromAddress}
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr style="border-bottom:1px solid #f3f4f6;">
-                                    <td style="padding:16px;color:#6b7280;font-size:13px;font-weight:600;vertical-align:top;">TO</td>
-                                    <td style="padding:16px;">
-                                        <div style="background:#f9fafb;padding:8px;border-radius:6px;font-family:'SF Mono',Monaco,monospace;font-size:12px;color:#374151;word-break:break-all;border:1px solid #e5e7eb;">
-                                            ${transactionDetails.toAddress}
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="padding:16px;color:#6b7280;font-size:13px;font-weight:600;">FEE</td>
-                                    <td style="padding:16px;">
-                                        <span style="background:#f59e0b;color:white;padding:4px 12px;border-radius:6px;font-size:11px;font-weight:700;">${transactionDetails.fee} ${transactionDetails.currency}</span>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-
-                        <div style="text-align:center;margin-top:24px;">
-                            <a href="${getExplorerUrl(transactionDetails.transactionHash, transactionDetails.network)}" target="_blank" style="display:inline-block;background:linear-gradient(135deg,#ef4444,#dc2626);color:white;padding:14px 28px;text-decoration:none;border-radius:8px;font-weight:700;font-size:13px;box-shadow:0 4px 14px rgba(239,68,68,0.4);transition:all 0.2s;">
-                                🔍 TRACK TRANSACTION
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Tracking Alert -->
-                    <div style="background:linear-gradient(135deg,#dbeafe,#eff6ff);border:1px solid #3b82f6;border-radius:8px;padding:16px;margin-top:20px;box-shadow:0 3px 10px rgba(59,130,246,0.15);">
-                        <div style="display:flex;align-items:flex-start;">
-                            <div style="color:#1d4ed8;margin-right:12px;font-size:18px;">⚡</div>
-                            <div>
-                                <h4 style="color:#1e40af;margin:0 0 4px;font-size:14px;font-weight:700;">TRANSACTION TRACKING</h4>
-                                <p style="margin:0;color:#2563eb;font-size:12px;line-height:1.5;">
-                                    Monitor your withdrawal progress on the blockchain explorer. Network confirmations typically take 10-60 minutes.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Footer -->
-            <div style="text-align:center;padding:40px 20px 0;">
-                <div style="background:rgba(255,255,255,0.05);backdrop-filter:blur(10px);border-radius:12px;padding:24px;border:1px solid rgba(255,255,255,0.1);">
-                    <p style="color:#9ca3af;font-size:13px;margin:0 0 12px;font-weight:500;">
-                        Powered by <strong style="color:#ef4444;">PLUTUS</strong> • Advanced Crypto Flash Technology
-                    </p>
-                    <div style="border-top:1px solid rgba(255,255,255,0.1);padding-top:12px;">
-                        <p style="color:#6b7280;font-size:11px;margin:0;line-height:1.4;">
-                            © ${new Date().getFullYear()} Plutus. All rights reserved. | ID: ${transactionDetails.transactionId}<br>
-                            This is an automated message. Do not reply to this email.
-                        </p>
-                    </div>
-                </div>
-            </div>
+      <!-- Main Card -->
+      <div class="main-card">
+        <!-- Status Section -->
+        <div class="status-section">
+          <div class="status-icon">→</div>
+          <div class="status-title">Withdrawal Sent</div>
+          <div class="status-subtitle">Your cryptocurrency withdrawal has been successfully initiated</div>
+          
+          <div class="amount-display">
+            <div class="amount-value">-${transactionDetails.amount} ${transactionDetails.currency}</div>
+            <div class="amount-network">${transactionDetails.network} Network</div>
+            <div class="fee-display">Network Fee: ${transactionDetails.fee} ${transactionDetails.currency}</div>
+          </div>
+          
+          ${transactionDetails.estimatedArrival ? `
+          <div class="estimated-arrival">
+            <div class="estimated-arrival-text">Estimated Arrival: ${transactionDetails.estimatedArrival}</div>
+          </div>
+          ` : ''}
         </div>
+
+        <!-- Transaction Details -->
+        <div class="details-section">
+          <div class="detail-row">
+            <div class="detail-label">Transaction ID:</div>
+            <div class="detail-value">${transactionDetails.transactionId}</div>
+          </div>
+          
+          <div class="detail-row">
+            <div class="detail-label">Transaction Hash:</div>
+            <div class="detail-value">
+              <a href="${transactionDetails.transactionHash}" 
+                 class="hash-link" target="_blank">${transactionDetails.transactionHash}</a>
+            </div>
+          </div>
+          
+          <div class="detail-row">
+            <div class="detail-label">Date & Time:</div>
+            <div class="detail-value">${formatDate(transactionDetails.timestamp)}</div>
+          </div>
+          
+          <div class="detail-row">
+            <div class="detail-label">From Address:</div>
+            <div class="detail-value">${transactionDetails.fromAddress}</div>
+          </div>
+          
+          <div class="detail-row">
+            <div class="detail-label">To Address:</div>
+            <div class="detail-value">${transactionDetails.toAddress}</div>
+          </div>
+          
+          <div class="detail-row">
+            <div class="detail-label">Network:</div>
+            <div class="detail-value">${transactionDetails.network}</div>
+          </div>
+          
+         
+          
+          <div class="detail-row">
+            <div class="detail-label">Status:</div>
+            <div class="detail-value">
+              <span class="status-badge status-${transactionDetails.status}">${transactionDetails.status}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+          <a href="${transactionDetails.transactionHash}" 
+             class="btn btn-primary" target="_blank">Track Transaction</a>
+          <a href="https://plutus.uno/transactions" class="btn btn-secondary">Transaction History</a>
+        </div>
+
+        <!-- Tracking Notice -->
+        <div class="tracking-notice">
+          <div class="tracking-notice-icon">•</div>
+          <div class="tracking-notice-text">
+            <strong>Transaction Tracking:</strong> You can monitor the progress of your withdrawal using the blockchain explorer link above. 
+            The transaction will be confirmed once it receives sufficient network confirmations.
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="footer">
+                
+        <div class="footer-text">
+          © ${new Date().getFullYear()} Plutus Crypto Flash. All rights reserved.<br>
+          This email was sent to ${email}. If you didn't authorize this withdrawal, please contact support immediately.<br>
+          <strong>Transaction initiated at:</strong> ${formatDate(transactionDetails.timestamp)}
+        </div>
+      </div>
     </div>
-</body>
+  </body>
 </html>
-    `,
+`,
   }
 
   const res = await transporter.sendMail(mailOptions)

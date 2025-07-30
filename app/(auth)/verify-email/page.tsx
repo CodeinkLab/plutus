@@ -15,14 +15,14 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL('https://plutus-crypto.com'),
+  metadataBase: new URL('https://plutus.uno'),
   alternates: {
     canonical: '/',
   },
   openGraph: {
     title: "Plutus Verify Email | Crypto Receipt && Real Crypto Flasher",
     description: "Plutus is a cryptocurrency wallet and exchange application that allows you to send flash transactions to any of the supported wallet addresses that can last for about 90 days.",
-    url: 'https://plutus-crypto.com',
+    url: 'https://plutus.uno',
     siteName: 'Plutus',
     images: [
       {
