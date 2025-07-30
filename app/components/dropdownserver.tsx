@@ -101,7 +101,7 @@ const ServersDropDownComponent = () => {
                 <div className="flex items-center">
                     {!user && <button className="px-8 py-1 rounded text-black bg-green-900"
                         onClick={handleAuth}
-                    >Sign in</button>}
+                    >Sign Up Now</button>}
                     {user && <button className="px-8 py-1 rounded text-red-800 bg-neutral-900 hover:bg-neutral-800"
                         onClick={handleSignout}
                     >SignOut</button>}

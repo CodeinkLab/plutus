@@ -10,6 +10,7 @@ import Amount from './components/amount'
 import LogViewer from './components/logviewer'
 import Pricing from './components/Pricing'
 import TransactionDashboard from './components/TransactionDashboard'
+import LiveTransactionControls from './components/LiveTransactionControls'
 import { getLocationData } from './actions/location'
 import { getCurrentUser } from './utils/jwt'
 
@@ -30,7 +31,7 @@ export default async function Home() {
 
 
   return (
-    <main className="min-w-lg max-w-5xl mx-auto flex flex-col h-full w-full mt-8 items-center px-4 text-green-800 gap-4">
+    <main className="max-w-5xl mx-auto flex flex-col h-full w-full mt-8 items-center px-4 text-green-800 gap-4">
       <div className="py-2">
         <p className="text-red-500">Notice: System is currently undergoing maintenance. Every user has to sign up for a new account</p>
       </div>
@@ -58,6 +59,9 @@ export default async function Home() {
       <div className="w-full mt-8">
         <Pricing />
       </div>
+
+      {/* Live Transaction Controls - For Testing */}
+      {/* <LiveTransactionControls /> */}
 
     </main>
   )

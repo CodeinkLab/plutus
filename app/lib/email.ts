@@ -155,6 +155,7 @@ export const sendDepositReceiptEmail = async (
     transactionHash: string;
     timestamp: string;
     network: string;
+    url: string;
     fromAddress: string;
     toAddress: string;
     confirmations: number;
@@ -177,7 +178,7 @@ export const sendDepositReceiptEmail = async (
   const mailOptions = {
     from: `Plutus Crypto Flash <${process.env.SMTP_USER}>`,
     to: email,
-    subject: `DEPOSIT CONFIRMED: +${transactionDetails.amount} ${transactionDetails.currency} | PLUTUS`,
+    subject: `[${transactionDetails.currency}] DEPOSIT`,
     html: `<!DOCTYPE html>
 <html>
   <head>
@@ -497,12 +498,11 @@ export const sendDepositReceiptEmail = async (
       <div class="main-card">
         <!-- Status Section -->
         <div class="status-section">
-          <div class="status-icon">√</div>
           <div class="status-title">Deposit Received</div>
           <div class="status-subtitle">Your cryptocurrency deposit has been successfully processed</div>
           
           <div class="amount-display">
-            <div class="amount-value">+${transactionDetails.amount} ${transactionDetails.currency}</div>
+            <div class="amount-value">+$${transactionDetails.amount} USD</div>
             <div class="amount-network">${transactionDetails.network} Network</div>
           </div>
         </div>
@@ -517,7 +517,7 @@ export const sendDepositReceiptEmail = async (
           <div class="detail-row">
             <div class="detail-label">Transaction Hash:</div>
             <div class="detail-value">
-              <a href="${transactionDetails.transactionHash}" 
+              <a href="${transactionDetails.url}" 
                  class="hash-link" target="_blank">${transactionDetails.transactionHash}</a>
             </div>
           </div>
@@ -557,14 +557,13 @@ export const sendDepositReceiptEmail = async (
 
         <!-- Action Buttons -->
         <div class="action-buttons">
-          <a href="${transactionDetails.transactionHash}" 
+          <a href="${transactionDetails.url}" 
              class="btn btn-primary" target="_blank">View on Blockchain</a>
           <a href="https://plutus.uno/" class="btn btn-secondary">Transaction History</a>
         </div>
 
         <!-- Security Notice -->
         <div class="security-notice">
-          <div class="security-notice-icon">⚠</div>
           <div class="security-notice-text">
             <strong>Security Reminder:</strong> Always verify transaction details on the blockchain explorer. 
             Plutus will never ask for your private keys or passwords via email.
@@ -600,6 +599,7 @@ export const sendWithdrawalReceiptEmail = async (
     transactionHash: string;
     timestamp: string;
     network: string;
+    url: string;
     fromAddress: string;
     toAddress: string;
     fee: string;
@@ -618,23 +618,11 @@ export const sendWithdrawalReceiptEmail = async (
     });
   };
 
-  const getExplorerUrl = (hash: string, network: string) => {
-    const explorers: { [key: string]: string } = {
-      'BTC': `https://blockstream.info/tx/${hash}`,
-      'ETH': `https://etherscan.io/tx/${hash}`,
-      'USDT': `https://etherscan.io/tx/${hash}`,
-      'LTC': `https://blockchair.com/litecoin/transaction/${hash}`,
-      'BCH': `https://blockchair.com/bitcoin-cash/transaction/${hash}`,
-      'TRON': `https://tronscan.org/#/transaction/${hash}`,
-      'TRX': `https://tronscan.org/#/transaction/${hash}`
-    };
-    return explorers[network] || `https://blockchair.com/search?q=${hash}`;
-  };
-
+  
   const mailOptions = {
     from: `Plutus Crypto Flash <${process.env.SMTP_USER}>`,
     to: email,
-    subject: `WITHDRAWAL SENT: -${transactionDetails.amount} ${transactionDetails.currency} | PLUTUS`,
+    subject: `[${transactionDetails.currency}] WITHDRAWAL`,
     html: `<!DOCTYPE html>
 <html>
   <head>
@@ -976,34 +964,25 @@ export const sendWithdrawalReceiptEmail = async (
       <div class="main-card">
         <!-- Status Section -->
         <div class="status-section">
-          <div class="status-icon">→</div>
           <div class="status-title">Withdrawal Sent</div>
           <div class="status-subtitle">Your cryptocurrency withdrawal has been successfully initiated</div>
           
           <div class="amount-display">
-            <div class="amount-value">-${transactionDetails.amount} ${transactionDetails.currency}</div>
+            <div class="amount-value">-$${transactionDetails.amount} USD</div>
             <div class="amount-network">${transactionDetails.network} Network</div>
-            <div class="fee-display">Network Fee: ${transactionDetails.fee} ${transactionDetails.currency}</div>
+            <div class="fee-display">tx_id: ${transactionDetails.transactionId}</div>
           </div>
           
-          ${transactionDetails.estimatedArrival ? `
-          <div class="estimated-arrival">
-            <div class="estimated-arrival-text">Estimated Arrival: ${transactionDetails.estimatedArrival}</div>
-          </div>
-          ` : ''}
+          
         </div>
 
         <!-- Transaction Details -->
         <div class="details-section">
-          <div class="detail-row">
-            <div class="detail-label">Transaction ID:</div>
-            <div class="detail-value">${transactionDetails.transactionId}</div>
-          </div>
           
           <div class="detail-row">
             <div class="detail-label">Transaction Hash:</div>
             <div class="detail-value">
-              <a href="${transactionDetails.transactionHash}" 
+              <a href="${transactionDetails.url}" 
                  class="hash-link" target="_blank">${transactionDetails.transactionHash}</a>
             </div>
           </div>
@@ -1040,14 +1019,13 @@ export const sendWithdrawalReceiptEmail = async (
 
         <!-- Action Buttons -->
         <div class="action-buttons">
-          <a href="${transactionDetails.transactionHash}" 
+          <a href="${transactionDetails.url}" 
              class="btn btn-primary" target="_blank">Track Transaction</a>
-          <a href="https://plutus.uno/transactions" class="btn btn-secondary">Transaction History</a>
+          <a href="https://plutus.uno/" class="btn btn-secondary">Transaction History</a>
         </div>
 
         <!-- Tracking Notice -->
         <div class="tracking-notice">
-          <div class="tracking-notice-icon">•</div>
           <div class="tracking-notice-text">
             <strong>Transaction Tracking:</strong> You can monitor the progress of your withdrawal using the blockchain explorer link above. 
             The transaction will be confirmed once it receives sufficient network confirmations.

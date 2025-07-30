@@ -5,6 +5,7 @@ import { DialogProvider } from "@/app/lib/dialog"
 import { Toaster } from "react-hot-toast";
 import { ContentProvider } from "./hooks/context";
 import { AuthProvider } from "./hooks/AuthContext";
+import LiveTransactionPopup from "./components/LiveTransactionPopup";
 
 
 export const metadata: Metadata = {
@@ -95,6 +96,7 @@ export default function RootLayout({
           <ContentProvider>
             <DialogProvider>
               {children}
+              <LiveTransactionPopup />
             </DialogProvider>
           </ContentProvider>
         </AuthProvider>

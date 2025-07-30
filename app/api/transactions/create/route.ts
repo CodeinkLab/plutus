@@ -22,6 +22,7 @@ export async function POST(request: NextRequest) {
       receiverAddress,
       receiverEmail,
       transactionHash,
+      url,
       network,
       _transactionType = 'flash' // 'flash', 'deposit', 'withdrawal'
     } = body;
@@ -80,6 +81,7 @@ export async function POST(request: NextRequest) {
       transactionHash,
       amount: parseFloat(amount).toString(),
       currency,
+      url,
       network,
       timestamp: new Date().toISOString(),
       fromAddress: senderAddress,
@@ -122,6 +124,7 @@ export async function POST(request: NextRequest) {
         network,
         status: 'CONFIRMED',
         hash: transactionHash,
+        url,
         senderAddress,
         receiverAddress,
         timestamp: transaction.createdAt,

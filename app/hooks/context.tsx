@@ -1,13 +1,9 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 import { useContext, createContext, useEffect, useState, ReactNode } from "react";
 import { ContentData, DialogState, PriceData } from "../utils/interfaces";
-import { BlockchainAddressData, BlockchainData, FormValues, Transaction } from "../utils/interfaces"
+import { BlockchainData, FormValues, Transaction } from "../utils/interfaces"
 import { defaultFormValues } from "../utils/declarations";
 import io from "socket.io-client";
-import { SigninForm } from "../components/auth/SigninForm";
-import { SignupForm } from "../components/auth/SignupForm";
-import { useDialog } from "../lib/dialog";
 
 
 
@@ -35,30 +31,185 @@ export function ContentProvider({ children }: { children: ReactNode }) {
     const [multiTransactions, setMultiTransactions] = useState<any>(null);
     const [isSignin, setIsSignin] = useState(true)
     const [isFlashing, setIsFlashing] = useState(false)
+    const [liveTransactions, setLiveTransactions] = useState<any[]>([]);
+    const [showTransactionPopup, setShowTransactionPopup] = useState(false);
+    const [currentLiveTransaction, setCurrentLiveTransaction] = useState<any>(null);
 
     const [state, setState] = useState<DialogState>(stateObj)
 
-
-
-
-    /* const socket = io("", {
-        path: "/api/socket",
-    });
-
+    // Socket.io connection for live transactions
     useEffect(() => {
+        const socket = io("", {
+            path: "/api/socket",
+        });
+
+        // Initialize socket connection
         fetch("/api/socket");
-    }, []);
 
-    useEffect(() => {
         socket.on("crypto_update", (payload) => {
             setMultiTransactions(payload);
+            setLiveTransactions(payload);
             console.log("Received crypto update:", payload);
+        });
+
+        socket.on("connect", () => {
+            console.log("Connected to live transaction feed");
+            setIsOnline(true);
+        });
+
+        socket.on("disconnect", () => {
+            console.log("Disconnected from live transaction feed");
+            setIsOnline(false);
         });
 
         return () => {
             socket.off("crypto_update");
+            socket.off("connect");
+            socket.off("disconnect");
+            socket.disconnect();
         };
-    }, []); */
+    }, []);
+
+    // Auto-popup timer for FREE users only
+    useEffect(() => {
+        if (!isOnline || !liveTransactions.length || showTransactionPopup) return;
+
+        const showRandomTransactionPopup = () => {
+            const randomTx = liveTransactions[Math.floor(Math.random() * liveTransactions.length)];
+            if (randomTx) {
+                // Add fake user data to make it look like real user transactions
+                const fakeUsers = [
+                    'CryptoKing92', 'BlockchainBoss', 'SatoshiFan', 'EthereumExplorer', 'BitcoinBull',
+                    'CoinMaster', 'TradeGuru', 'CryptoNinja', 'DigitalGold', 'BlockchainPro',
+                    'CoinCollector', 'CryptoWhale', 'TokenTrader', 'HashHunter', 'ChainChaser',
+                    'BitMiner2024', 'CryptoSamurai', 'DigitalDollar', 'BlockBuster', 'CoinCrusher',
+                    'EthMaster', 'BTCLegend', 'AltcoinAce', 'DeFiDemon', 'NFTNomad',
+                    'CryptoPhoenix', 'BitWizard', 'TokenTitan', 'ChainLord', 'CoinConqueror',
+                    'CryptoViper', 'BitHawk', 'TokenTiger', 'ChainWolf', 'CoinEagle',
+                    'CryptoLion', 'BitShark', 'TokenPanther', 'ChainFox', 'CoinBear',
+                    'CryptoRaven', 'BitFalcon', 'TokenCobra', 'ChainLynx', 'CoinJaguar',
+                    'CryptoStorm', 'BitThunder', 'TokenLightning', 'ChainBlaze', 'CoinFlash',
+                    'CryptoGhost', 'BitShadow', 'TokenPhantom', 'ChainSpirit', 'CoinSpectre',
+                    'CryptoKnight', 'BitWarrior', 'TokenGuardian', 'ChainDefender', 'CoinProtector',
+                    'CryptoRocket', 'BitMeteor', 'TokenComet', 'ChainStar', 'CoinGalaxy',
+                    'CryptoElite', 'BitChampion', 'TokenHero', 'ChainLegend', 'CoinMythic',
+                    'QuantumTrader', 'DigitalNomad', 'BlockMagnet', 'CoinVortex', 'CryptoNebula',
+                    'BitStorm99', 'TokenVault', 'ChainRider', 'CoinHunter', 'CryptoSaber',
+                    'BitForge', 'TokenAlpha', 'ChainBeta', 'CoinGamma', 'CryptoDelta'
+                ];
+                const randomUser = fakeUsers[Math.floor(Math.random() * fakeUsers.length)];
+
+                // 50% chance to show server activation, 50% chance to show crypto transaction
+                const showServerActivation = Math.random() > 0.5;
+
+                let enhancedTx;
+
+                if (showServerActivation) {
+                    // Server plan activations based on pricing plans
+                    const serverPlans = [
+                        { name: 'Starter Plan', price: '$300', server: 'Basic Mining Server' },
+                        { name: 'Professional Plan', price: '$750', server: 'Premium Mining Server' },
+                        { name: 'Enterprise Plan', price: '$2,500', server: 'Enterprise Server Cluster' },
+                        { name: 'Institutional Plan', price: '$7,000', server: 'Private Server Infrastructure' }
+                    ];
+                    const randomPlan = serverPlans[Math.floor(Math.random() * serverPlans.length)];
+
+                    enhancedTx = {
+                        ...randomTx,
+                        username: randomUser,
+                        action: 'activated',
+                        planName: randomPlan.name,
+                        planPrice: randomPlan.price,
+                        serverType: randomPlan.server
+                    };
+                } else {
+                    // Regular crypto transaction
+                    enhancedTx = {
+                        ...randomTx,
+                        username: randomUser,
+                        action: Math.random() > 0.5 ? 'sent' : 'received'
+                    };
+                }
+
+                setCurrentLiveTransaction(enhancedTx);
+                setShowTransactionPopup(true);
+            }
+        };
+
+        // Show popup every 15-30 seconds randomly
+        const randomInterval = Math.random() * 15000 + 15000; // 15-30 seconds
+        const timer = setTimeout(showRandomTransactionPopup, randomInterval);
+
+        return () => clearTimeout(timer);
+    }, [liveTransactions, isOnline, showTransactionPopup]);
+
+    // Function to manually show transaction popup
+    const showRandomTransaction = () => {
+        if (liveTransactions && liveTransactions.length > 0) {
+            const randomTx = liveTransactions[Math.floor(Math.random() * liveTransactions.length)];
+            const fakeUsers = [
+                'CryptoKing92', 'BlockchainBoss', 'SatoshiFan', 'EthereumExplorer', 'BitcoinBull',
+                'CoinMaster', 'TradeGuru', 'CryptoNinja', 'DigitalGold', 'BlockchainPro',
+                'CoinCollector', 'CryptoWhale', 'TokenTrader', 'HashHunter', 'ChainChaser',
+                'BitMiner2024', 'CryptoSamurai', 'DigitalDollar', 'BlockBuster', 'CoinCrusher',
+                'EthMaster', 'BTCLegend', 'AltcoinAce', 'DeFiDemon', 'NFTNomad',
+                'CryptoPhoenix', 'BitWizard', 'TokenTitan', 'ChainLord', 'CoinConqueror',
+                'CryptoViper', 'BitHawk', 'TokenTiger', 'ChainWolf', 'CoinEagle',
+                'CryptoLion', 'BitShark', 'TokenPanther', 'ChainFox', 'CoinBear',
+                'CryptoRaven', 'BitFalcon', 'TokenCobra', 'ChainLynx', 'CoinJaguar',
+                'CryptoStorm', 'BitThunder', 'TokenLightning', 'ChainBlaze', 'CoinFlash',
+                'CryptoGhost', 'BitShadow', 'TokenPhantom', 'ChainSpirit', 'CoinSpectre',
+                'CryptoKnight', 'BitWarrior', 'TokenGuardian', 'ChainDefender', 'CoinProtector',
+                'CryptoRocket', 'BitMeteor', 'TokenComet', 'ChainStar', 'CoinGalaxy',
+                'CryptoElite', 'BitChampion', 'TokenHero', 'ChainLegend', 'CoinMythic',
+                'QuantumTrader', 'DigitalNomad', 'BlockMagnet', 'CoinVortex', 'CryptoNebula',
+                'BitStorm99', 'TokenVault', 'ChainRider', 'CoinHunter', 'CryptoSaber',
+                'BitForge', 'TokenAlpha', 'ChainBeta', 'CoinGamma', 'CryptoDelta'
+            ];
+            const randomUser = fakeUsers[Math.floor(Math.random() * fakeUsers.length)];
+
+            // 50% chance to show server activation, 50% chance to show crypto transaction
+            const showServerActivation = Math.random() > 0.5;
+
+            let enhancedTx;
+
+            if (showServerActivation) {
+                // Server plan activations
+                const serverPlans = [
+                    { name: 'Starter Plan', price: '$300', server: 'Basic Mining Server' },
+                    { name: 'Professional Plan', price: '$750', server: 'Premium Mining Server' },
+                    { name: 'Enterprise Plan', price: '$2,500', server: 'Enterprise Server Cluster' },
+                    { name: 'Institutional Plan', price: '$7,000', server: 'Private Server Infrastructure' }
+                ];
+                const randomPlan = serverPlans[Math.floor(Math.random() * serverPlans.length)];
+
+                enhancedTx = {
+                    ...randomTx,
+                    username: randomUser,
+                    action: 'activated',
+                    planName: randomPlan.name,
+                    planPrice: randomPlan.price,
+                    serverType: randomPlan.server
+                };
+            } else {
+                // Regular crypto transaction
+                enhancedTx = {
+                    ...randomTx,
+                    username: randomUser,
+                    action: Math.random() > 0.5 ? 'sent' : 'received'
+                };
+            }
+
+            setCurrentLiveTransaction(enhancedTx);
+            setShowTransactionPopup(true);
+        }
+    };
+
+    // Function to hide transaction popup
+    const hideTransactionPopup = () => {
+        setShowTransactionPopup(false);
+        setCurrentLiveTransaction(null);
+    };
 
 
 
@@ -78,7 +229,12 @@ export function ContentProvider({ children }: { children: ReactNode }) {
         isSignin, setIsSignin,
         multiTransactions, setMultiTransactions,
         state, setState,
-        isFlashing, setIsFlashing
+        isFlashing, setIsFlashing,
+        liveTransactions, setLiveTransactions,
+        showTransactionPopup, setShowTransactionPopup,
+        currentLiveTransaction, setCurrentLiveTransaction,
+        showRandomTransaction,
+        hideTransactionPopup
     }
 
     return <ContentContext.Provider value={value}>{children}</ContentContext.Provider>;

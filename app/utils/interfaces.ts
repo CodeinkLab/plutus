@@ -130,6 +130,14 @@ export interface ContentData {
   setState: (data: DialogState) => void
   isFlashing: boolean
   setIsFlashing: (data: boolean) => void
+  liveTransactions: any[]
+  setLiveTransactions: (data: any[]) => void
+  showTransactionPopup: boolean
+  setShowTransactionPopup: (data: boolean) => void
+  currentLiveTransaction: any
+  setCurrentLiveTransaction: (data: any) => void
+  showRandomTransaction: () => void
+  hideTransactionPopup: () => void
 }
 
 

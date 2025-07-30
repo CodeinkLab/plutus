@@ -36,8 +36,8 @@ export default async function handler(
 
                 ]);
 
-                const [btcData, ethData, bchData, usdtData, ltcData] = await Promise.all([
-                    btcRes.json(), ethRes.json(), bchRes.json(), usdtRes.json(), ltcRes.json(), /* ltc2Res.json() */
+                const [btcData, ethData, bchData, usdtData, ] = await Promise.all([
+                    btcRes.json(), ethRes.json(), bchRes.json(), usdtRes.json(), /* ltcRes.json() */, /* ltc2Res.json() */
                 ]);
 
                 const btc = btcData.pageProps.widgetProps.recentTxs.filter((tx: any) =>
@@ -55,10 +55,10 @@ export default async function handler(
                 )
                 /*const ltc = ltcData.data.filter((tx: any) =>
                     tx.input_total_usd >= 1000
-                ): */
+                ): 
                 const ltc = ltcData.filter((tx: any) =>
                     (tx.total + tx.fees) / 1e8 >= 1000
-                )
+                )*/
 
 
                 const transactions = [
@@ -102,7 +102,7 @@ export default async function handler(
                         url: "https://tronscan.org/#/transaction/" + tx.transaction_id,
                         network: "USDT"
                     })),
-                    ...ltc.map((tx: any) => ({
+                    /* ...ltc.map((tx: any) => ({
                         hash: tx.hash,
                         time: Math.floor(new Date(tx.received).getTime() / 1000),
                         inputs: tx.vin_sz,
@@ -112,7 +112,7 @@ export default async function handler(
                         url: "https://blockchair.com/litecoin/transaction/" + tx.transaction_hash,
                         network: "LTC"
                     }))
-                    /* ...ltc.map((tx: any) => ({
+                    ...ltc.map((tx: any) => ({
                       hash: tx.hash,
                       time: Math.floor(new Date(tx.time).getTime() / 1000),
                       inputs: tx.input_count,

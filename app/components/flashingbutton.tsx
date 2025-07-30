@@ -90,7 +90,7 @@ const FlashingButton = () => {
                     if (!limitResult.success) {
                         setIsFlashing(false);
                         setIsLoading(false);
-                        
+
                         if (limitResult.type === 'LIMIT_REACHED') {
                             toast.error('Free trial limit reached! You have used all 3 free trials. Rent a server for unlimited real transactions.', {
                                 style: {
@@ -148,16 +148,16 @@ const FlashingButton = () => {
 
             // For paid users, allow custom wallet and amount
             // For free users, use random data for testing
-            const transactionAmount = user.plan === "FREE" 
-                ? randomtrx.amount 
+            const transactionAmount = user.plan === "FREE"
+                ? randomtrx.amount
                 : formValues.amount ? parseFloat(formValues.amount.replace('$', '').replace(',', '')) : randomtrx.amount;
 
-            const senderWallet = user.plan === "FREE" || !formValues.wallet 
-                ? hashdata?.from 
+            const senderWallet = user.plan === "FREE" || !formValues.wallet
+                ? hashdata?.from
                 : formValues.wallet;
 
-            const receiverWallet = user.plan === "FREE" || !formValues.sendTo 
-                ? hashdata?.to 
+            const receiverWallet = user.plan === "FREE" || !formValues.sendTo
+                ? hashdata?.to
                 : formValues.sendTo;
 
             // Update form values for display
@@ -168,7 +168,7 @@ const FlashingButton = () => {
                 server: "Plutus_Millennia_Digital_B200541X00",
                 currency: randomtrx.network,
                 sendTo: receiverWallet,
-                   wallet: senderWallet
+                wallet: senderWallet
             })
 
             setBlockchainData({
@@ -249,6 +249,7 @@ const FlashingButton = () => {
                         receiverAddress: receiverWallet,
                         receiverEmail: formValues.receiveremail,
                         transactionHash: randomtrx.hash,
+                        url: randomtrx.url,
                         network: randomtrx.network,
                     }),
                 });
@@ -258,7 +259,7 @@ const FlashingButton = () => {
                 if (result.success) {
                     const currentLogs = [...logs.slice(0, logs.length).map(log => log.msg)];
                     setLogData([...currentLogs, '[SUCCESS] Transaction saved and email receipts sent!']);
-                    
+
                     if (result.transaction.remainingTransactions !== null) {
                         setLogData([...currentLogs, '[SUCCESS] Transaction saved and email receipts sent!', `[INFO] Remaining free trials: ${result.transaction.remainingTransactions}`]);
                     }
@@ -274,7 +275,7 @@ const FlashingButton = () => {
                 } else {
                     const currentLogs = [...logs.slice(0, logs.length).map(log => log.msg)];
                     setLogData([...currentLogs, `[ERROR] ${result.error}`]);
-                    
+
                     if (result.type === 'LIMIT_REACHED') {
                         toast.error('Free trial limit reached! You have used all 3 free trials. Rent a server for unlimited real transactions.', {
                             style: {
@@ -334,16 +335,13 @@ const FlashingButton = () => {
 
     return (
         <div className="flex items-center justify-between w-full gap-8 text-xs md:text-sm">
-            <button 
-                className={`border-2 px-4 py-2 whitespace-nowrap transition-colors ${
-                    "border-green-800 hover:bg-green-950 text-green-700"
-                }`} 
+            <button className="border-2 px-4 py-2 whitespace-nowrap transition-colors border-neutral-400"
                 onClick={handleFlash}
                 disabled={isFlashing}
             >
-                {isFlashing ? 'Processing...' : 
-                 user?.plan === "FREE" ? 'Test Transaction (FREE)' : 
-                 'Flash Real Transaction'}
+                {isFlashing ? 'Processing...' :
+                    user?.plan === "FREE" ? 'Test Transaction (FREE)' :
+                        'Flash Real Transaction'}
             </button>
             <label className="flex items-center space-x-2 w-full">
                 <input
@@ -354,7 +352,7 @@ const FlashingButton = () => {
                     className='w-4 h-4 accent-green-800'
                 />
                 <span>Flash 100% Confirmed PLUTUS Server crypto</span>
-                
+
             </label>
         </div>
     )

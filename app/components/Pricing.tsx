@@ -91,7 +91,7 @@ export default function Pricing({ onSelectPlan }: PricingProps) {
   };
 
   return (
-    <div className="bg-gray-950 py-12">
+    <div className="bg-gray-950 py-12" id="server-plans">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
           <h2 className="text-3xl font-extrabold text-white sm:text-4xl">
