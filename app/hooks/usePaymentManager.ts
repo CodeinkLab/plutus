@@ -29,8 +29,7 @@ export function usePaymentManager() {
   }, []);
 
   const createPayment = async (plan: PricingPlan, payCurrency: string = 'btc') => {
-    setIsLoading(true);
-    
+    setIsLoading(true);    
     try {
       const response = await fetch('/api/payments/create', {
         method: 'POST',

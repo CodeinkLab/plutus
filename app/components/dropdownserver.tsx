@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useActions } from '../utils/actions'
 import { useAuth } from '../hooks/AuthContext'
 import { useContent } from '../hooks/context'
@@ -7,14 +7,15 @@ import { dialog, useDialog } from '../lib/dialog'
 import { SigninForm } from './auth/SigninForm'
 import { SignupForm } from './auth/SignupForm'
 import { toast } from 'react-hot-toast'
+import { sign } from 'crypto'
 
 const ServersDropDownComponent = () => {
     const { user } = useAuth()
     const dialog = useDialog()
-    const { isSignin, formValues, setFormValues } = useContent()
+    const { isSignin, formValues, state, setFormValues } = useContent()
+    const [signin, setSignin] = React.useState(true)
 
     const handleAuth = () => {
-
         dialog.showDialog({
             title: "",
             type: "component",
@@ -22,6 +23,18 @@ const ServersDropDownComponent = () => {
             component: isSignin ? <SigninForm /> : <SignupForm />,
         })
     }
+
+    useEffect(() => {
+        if (state.isOpen ) {
+            dialog.showDialog({
+                title: isSignin ? "Welcome Back! Sign In" : "Sign up for A new Account",
+                type: "component",
+                message: "",
+                component: isSignin ? <SigninForm /> : <SignupForm />,
+            })
+        } 
+
+    }, [isSignin, state.isOpen])
 
     const handleSignout = () => {
         dialog.showDialog({
@@ -88,7 +101,7 @@ const ServersDropDownComponent = () => {
                 <div className="flex items-center">
                     {!user && <button className="px-8 py-1 rounded text-black bg-green-900"
                         onClick={handleAuth}
-                    >Auth</button>}
+                    >Sign in</button>}
                     {user && <button className="px-8 py-1 rounded text-red-800 bg-neutral-900 hover:bg-neutral-800"
                         onClick={handleSignout}
                     >SignOut</button>}

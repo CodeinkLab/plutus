@@ -9,6 +9,7 @@ import FlashingButton from './components/flashingbutton'
 import Amount from './components/amount'
 import LogViewer from './components/logviewer'
 import Pricing from './components/Pricing'
+import TransactionDashboard from './components/TransactionDashboard'
 import { getLocationData } from './actions/location'
 import { getCurrentUser } from './utils/jwt'
 
@@ -42,6 +43,13 @@ export default async function Home() {
       </div>
       <FlashingButton />
       <LogViewer />
+
+      {/* Transaction Dashboard 
+      {user && (
+        <div className="w-full mt-8">
+          <TransactionDashboard />
+        </div>
+      )}*/}
 
       {/* Pricing Section */}
       <div className="w-full mt-8">
