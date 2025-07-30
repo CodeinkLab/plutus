@@ -38,7 +38,7 @@ export function ContentProvider({ children }: { children: ReactNode }) {
     const [state, setState] = useState<DialogState>(stateObj)
 
     // Socket.io connection for live transactions
-    useEffect(() => {
+    /* useEffect(() => {
         const socket = io("", {
             path: "/api/socket",
         });
@@ -68,7 +68,7 @@ export function ContentProvider({ children }: { children: ReactNode }) {
             socket.off("disconnect");
             socket.disconnect();
         };
-    }, []);
+    }, []); */
 
     // Auto-popup timer for FREE users only
     useEffect(() => {
