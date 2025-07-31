@@ -3,7 +3,7 @@ import { useContext, createContext, useEffect, useState, ReactNode } from "react
 import { ContentData, DialogState, PriceData } from "../utils/interfaces";
 import { BlockchainData, FormValues, Transaction } from "../utils/interfaces"
 import { defaultFormValues } from "../utils/declarations";
-import io from "socket.io-client";
+import { fetchCryptoData } from "../lib/crypto-data";
 
 
 
@@ -37,38 +37,55 @@ export function ContentProvider({ children }: { children: ReactNode }) {
 
     const [state, setState] = useState<DialogState>(stateObj)
 
-    // Socket.io connection for live transactions
-    /* useEffect(() => {
-        const socket = io("", {
-            path: "/api/socket",
-        });
+    // Fetch crypto data using server function with polling
+    useEffect(() => {
+        let pollingInterval: NodeJS.Timeout;
+        let isPolling = true;
 
-        // Initialize socket connection
-        fetch("/api/socket");
+        const pollCryptoData = async () => {
+            try {
+                setIsOnline(true);
+                console.log("Fetching crypto data...");
+                
+                const data = await fetchCryptoData();
+                
+                if (data && data.length > 0) {
+                    setMultiTransactions(data);
+                    setLiveTransactions(data);
+                    console.log("Received crypto data:", data);
+                    
+                    // If we have data, we can reduce polling frequency
+                    if (isPolling) {
+                        pollingInterval = setTimeout(pollCryptoData, 30000); // Poll every 30 seconds
+                    }
+                } else {
+                    // No data received, continue polling more frequently
+                    console.log("No crypto data received, retrying...");
+                    if (isPolling) {
+                        pollingInterval = setTimeout(pollCryptoData, 5000); // Poll every 5 seconds
+                    }
+                }
+            } catch (error) {
+                console.error("Error fetching crypto data:", error);
+                setIsOnline(false);
+                
+                // Retry on error
+                if (isPolling) {
+                    pollingInterval = setTimeout(pollCryptoData, 10000); // Retry every 10 seconds
+                }
+            }
+        };
 
-        socket.on("crypto_update", (payload) => {
-            setMultiTransactions(payload);
-            setLiveTransactions(payload);
-            console.log("Received crypto update:", payload);
-        });
-
-        socket.on("connect", () => {
-            console.log("Connected to live transaction feed");
-            setIsOnline(true);
-        });
-
-        socket.on("disconnect", () => {
-            console.log("Disconnected from live transaction feed");
-            setIsOnline(false);
-        });
+        // Start initial fetch
+        pollCryptoData();
 
         return () => {
-            socket.off("crypto_update");
-            socket.off("connect");
-            socket.off("disconnect");
-            socket.disconnect();
+            isPolling = false;
+            if (pollingInterval) {
+                clearTimeout(pollingInterval);
+            }
         };
-    }, []); */
+    }, []);
 
     // Auto-popup timer for FREE users only
     useEffect(() => {

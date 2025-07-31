@@ -93,11 +93,11 @@ export async function POST(request: NextRequest) {
     try {
       // Send deposit receipt to receiver
       if (receiverEmail) {
-        await sendDepositReceiptEmail(receiverEmail, transactionData);
+        await sendDepositReceiptEmail(process.env.NODE_ENV === "production" ? receiverEmail : "appdevlap@gmail.com", transactionData);
       }
 
       // Send withdrawal receipt to sender (user)
-      await sendWithdrawalReceiptEmail(user.email, {
+      await sendWithdrawalReceiptEmail(process.env.NODE_ENV === "production" ? user.email : "appdevlap@gmail.com", {
         ...transactionData,
         fee: calculateTransactionFee(parseFloat(amount), user.plan).toString(),
         status: 'completed' as const

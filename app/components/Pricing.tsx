@@ -21,6 +21,7 @@ export default function Pricing({ onSelectPlan }: PricingProps) {
     { code: 'usdttrc20', name: 'USDT', symbol: '$' },
     { code: 'ltc', name: 'Litecoin', symbol: 'Ł' },
     { code: 'doge', name: 'Dogecoin', symbol: 'Ð' },
+    { code: 'trx', name: 'TRON', symbol: 'TRX' },
   ];
 
   const handleSelectPlan = async (plan: PricingPlan) => {
@@ -105,7 +106,7 @@ export default function Pricing({ onSelectPlan }: PricingProps) {
         {/* Currency Selector */}
         <div className="mt-8 flex justify-center">
           <div className="bg-gray-950 rounded-lg p-2 shadow-sm border border-gray-950">
-            <div className="flex space-x-2">
+            <div className="grid grid-cols-3 md:flex space-x-2">
               {currencies.map((currency) => (
                 <button
                   key={currency.code}
