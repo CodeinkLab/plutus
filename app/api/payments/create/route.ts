@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { nowPaymentsService } from '@/app/services/nowpayments';
-import { requireAuth } from '@/app/lib/auth';
 import { getPlanById } from '@/app/data/pricing-plans';
 import prisma from '@/app/lib/prisma';
 import { getCurrentUser } from '@/app/utils/jwt';
@@ -17,7 +16,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { planId, payCurrency = 'btc' } = await request.json();
+    const { planId, payCurrency = 'btc', finalPrice, originalPrice, couponCode, discount } = await request.json();
+
+    console.log('Payment request:', { planId, finalPrice, originalPrice, couponCode, discount });
 
     if (!planId) {
       return NextResponse.json(
@@ -39,12 +40,13 @@ export async function POST(request: NextRequest) {
     const orderId = `plutus_${Date.now()}`;
 
     // Create payment with NowPayments
+    const paymentAmount = finalPrice || plan.price; // Use final price with discount or original price
     const paymentData = {
-      price_amount: plan.price,
+      price_amount: paymentAmount,
       price_currency: 'usd',
       pay_currency: payCurrency,
       order_id: orderId,
-      order_description: `Plutus ${plan.title} - ${plan.description}`,
+      order_description: `Plutus ${plan.title} - ${plan.description}${couponCode ? ` (Coupon: ${couponCode})` : ''}`,
       customer_email: user.email,
       success_url: `${process.env.NEXT_PUBLIC_APP_URL}/payment/success`,
       ipn_callback_url: `${process.env.NEXT_PUBLIC_APP_URL}/api/payments/webhook`,
@@ -56,7 +58,7 @@ export async function POST(request: NextRequest) {
     // Save payment to database
     const payment = await prisma.payment.create({
       data: {
-        amount: plan.price,
+        amount: originalPrice || plan.price, // Store original price for reference
         userId: user.id,
         status: 'PENDING',
         currency: payCurrency.toUpperCase(),
@@ -79,6 +81,11 @@ export async function POST(request: NextRequest) {
         orderId: paymentResponse.order_id,
         status: paymentResponse.payment_status,
         paymentUrl: paymentResponse.payment_url,
+        // Include coupon information in response
+        originalPrice: originalPrice || plan.price,
+        finalPrice: paymentAmount,
+        couponCode: couponCode || null,
+        discount: discount || 0,
       },
       plan,
     });

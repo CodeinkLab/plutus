@@ -39,7 +39,6 @@ export function ContentProvider({ children }: { children: ReactNode }) {
     const [state, setState] = useState<DialogState>(stateObj)
 
 
-
     // Fetch crypto data using server function with polling
     useEffect(() => {
         let pollingInterval: NodeJS.Timeout;

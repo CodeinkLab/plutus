@@ -10,6 +10,7 @@ export interface PricingPlan {
     popular?: boolean;
     badge?: string;
     endDate: Date;
+    couponCode?: Record<string, any>[];
 }
 
 export const pricingPlans: PricingPlan[] = [
@@ -27,7 +28,8 @@ export const pricingPlans: PricingPlan[] = [
             'Mobile app access',
             'Transaction history tracking'
         ],
-        endDate: new Date(Date.now() + 24 * 60 * 60 * 1000) // 1 day from now
+        endDate: new Date(Date.now() + 24 * 60 * 60 * 1000),
+        couponCode: [{ code: 'STARTER30', discount: 0.30 }]
     },
     {
         id: 'professional',
@@ -45,7 +47,8 @@ export const pricingPlans: PricingPlan[] = [
             'Detailed transaction analytics',
             'Custom wallet integration'
         ],
-        endDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) // 7 days from now
+        endDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+        couponCode: [{ code: 'PROFESSIONAL40', discount: 0.40 }]
     },
     {
         id: 'enterprise',
@@ -61,7 +64,8 @@ export const pricingPlans: PricingPlan[] = [
             'Advanced analytics & reporting',
             'Dedicated account manager'
         ],
-        endDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 days from now
+        endDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+        couponCode: [{ code: 'ENTERPRISE50', discount: 0.50 }]
     },
     {
         id: 'institutional',
@@ -78,7 +82,8 @@ export const pricingPlans: PricingPlan[] = [
             'Legal & regulatory support',
             'On-premise deployment option'
         ],
-        endDate: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000) // 365 days from now
+        endDate: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000),
+        couponCode: [{ code: 'INSTITUTIONAL68', discount: 0.68 }]
     }
 ];
 

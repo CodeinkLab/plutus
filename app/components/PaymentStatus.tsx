@@ -13,6 +13,20 @@ export default function PaymentStatus({ paymentId, onPaymentComplete }: PaymentS
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [copied, setCopied] = useState(false);
+    const [paymentData, setPaymentData] = useState<any>(null);
+
+    // Get stored payment data from localStorage
+    useEffect(() => {
+        const storedPayment = localStorage.getItem('currentPayment');
+        if (storedPayment) {
+            try {
+                const parsed = JSON.parse(storedPayment);
+                setPaymentData(parsed);
+            } catch (error) {
+                console.error('Error parsing stored payment:', error);
+            }
+        }
+    }, []);
 
     const checkPaymentStatus = useCallback(async () => {
         try {
@@ -154,10 +168,33 @@ export default function PaymentStatus({ paymentId, onPaymentComplete }: PaymentS
 
                 {payment && (
                     <div className="space-y-2 text-sm text-gray-600">
-                        <div className="flex justify-between">
-                            <span>Amount:</span>
-                            <span className='text-base font-extrabold'>${payment.amount}</span>
-                        </div>
+                        {/* Show original price and coupon discount if applicable */}
+                        {paymentData?.originalPrice && paymentData?.finalPrice !== paymentData?.originalPrice && (
+                            <>
+                                <div className="flex justify-between">
+                                    <span>Original Price:</span>
+                                    <span className="line-through text-gray-400">${paymentData.originalPrice.toLocaleString()}</span>
+                                </div>
+                                {paymentData.couponCode && (
+                                    <div className="flex justify-between text-green-600">
+                                        <span>Coupon ({paymentData.couponCode}):</span>
+                                        <span>-${(paymentData.originalPrice - paymentData.finalPrice).toLocaleString()}</span>
+                                    </div>
+                                )}
+                                <div className="flex justify-between font-semibold border-t border-gray-200 pt-1">
+                                    <span>Final Price:</span>
+                                    <span>${paymentData.finalPrice.toLocaleString()}</span>
+                                </div>
+                            </>
+                        )}
+                        
+                        {/* Show regular amount if no coupon applied */}
+                        {(!paymentData?.originalPrice || paymentData?.finalPrice === paymentData?.originalPrice) && (
+                            <div className="flex justify-between">
+                                <span>Amount:</span>
+                                <span className='text-base font-extrabold'>${payment.amount}</span>
+                            </div>
+                        )}
 
                         {payment.payAmount && (
                             <div className="flex justify-between">

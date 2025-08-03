@@ -10,6 +10,7 @@ export default function PaymentSuccessContent() {
     const searchParams = useSearchParams();
     const [paymentId, setPaymentId] = useState<string | null>(null);
     const [paymentComplete, setPaymentComplete] = useState(false);
+    const [paymentData, setPaymentData] = useState<any>(null);
 
     useEffect(() => {
         // Get payment ID from URL params or localStorage
@@ -22,6 +23,7 @@ export default function PaymentSuccessContent() {
             try {
                 const payment = JSON.parse(storedPayment);
                 setPaymentId(payment.paymentId);
+                setPaymentData(payment);
             } catch (error) {
                 console.error('Error parsing stored payment:', error);
             }
@@ -46,6 +48,34 @@ export default function PaymentSuccessContent() {
                         <p className="mt-2 text-sm text-gray-300">
                             Your plan has been upgraded successfully. You can now access all the features of your new plan.
                         </p>
+                        
+                        {/* Payment Summary */}
+                        {paymentData && (
+                            <div className="mt-6 p-4 bg-gray-800 rounded-lg border border-gray-700">
+                                <h3 className="text-lg font-semibold text-white mb-3">Payment Summary</h3>
+                                <div className="space-y-2 text-sm">
+                                    {paymentData.originalPrice && paymentData.finalPrice !== paymentData.originalPrice && (
+                                        <>
+                                            <div className="flex justify-between text-gray-400">
+                                                <span>Original Price:</span>
+                                                <span className="line-through">${paymentData.originalPrice.toLocaleString()}</span>
+                                            </div>
+                                            {paymentData.couponCode && (
+                                                <div className="flex justify-between text-green-400">
+                                                    <span>Coupon ({paymentData.couponCode}):</span>
+                                                    <span>-${(paymentData.originalPrice - paymentData.finalPrice).toLocaleString()}</span>
+                                                </div>
+                                            )}
+                                        </>
+                                    )}
+                                    <div className="flex justify-between text-white font-semibold border-t border-gray-600 pt-2">
+                                        <span>Final Price:</span>
+                                        <span>${(paymentData.finalPrice || paymentData.originalPrice || 0).toLocaleString()}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
                         <div className="mt-6">
                             <Link
                                 href="/"
