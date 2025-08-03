@@ -273,7 +273,7 @@ export default function Pricing({ onSelectPlan }: PricingProps) {
                         <p className="text-xs text-green-400">
                         💡 Hint: Join our Telegram channel for huge discounts up to 68% off: 
                         <a 
-                          href="https://t.me/+ULE91_JSta9s6KK6" 
+                          href="https://t.me/+cQ-BabDBEbM0MGE0" 
                           target="_blank" 
                           rel="noopener noreferrer"
                           className="underline hover:text-green-300 ml-1"
