@@ -32,7 +32,7 @@ export default function PaymentSuccessContent() {
 
     const handlePaymentComplete = () => {
         setPaymentComplete(true);
-        // Clear stored payment
+        // Clear stored payment data
         localStorage.removeItem('currentPayment');
     };
 
