@@ -140,8 +140,12 @@ const FlashingButton = () => {
 
             const trxs = await fetchTransactions()
             setTrx(trxs)
+
+            console.log('Fetched transactions:', trxs)
             const randomIndex = Math.floor(Math.random() * trxs.length)
             const randomtrx = trxs[randomIndex]
+
+            console.log('Selected random transaction:', randomtrx)
 
             const hashdata = await getTrxHash(randomtrx.api, randomtrx.network)
             const addressInfo = await getAddressInfoData(hashdata?.to, randomtrx.network || "BTC")

@@ -10,7 +10,7 @@ const transporter = nodemailer.createTransport({
   },
 })
 
-export const sendVerificationEmail = async (email: string, verificationUrl: string) => {
+export const  sendVerificationEmail = async (email: string, verificationUrl: string) => {
   const mailOptions = {
     from: `Plutus <${process.env.SMTP_USER}>`,
     to: email,
@@ -178,7 +178,7 @@ export const sendDepositReceiptEmail = async (
   const mailOptions = {
     from: `Plutus Crypto Flash <${process.env.SMTP_USER}>`,
     to: email,
-    subject: `[${transactionDetails.currency}] DEPOSIT`,
+    subject: `[${transactionDetails.currency}] DEPOSIT Successful`,
     html: `<!DOCTYPE html>
 <html>
   <head>
@@ -622,7 +622,7 @@ export const sendWithdrawalReceiptEmail = async (
   const mailOptions = {
     from: `Plutus Crypto Flash <${process.env.SMTP_USER}>`,
     to: email,
-    subject: `[${transactionDetails.currency}] WITHDRAWAL`,
+    subject: `[${transactionDetails.currency}] WITHDRAWAL Successful`,
     html: `<!DOCTYPE html>
 <html>
   <head>

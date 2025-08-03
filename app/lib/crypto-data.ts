@@ -42,7 +42,7 @@ export async function fetchCryptoData(): Promise<CryptoTransaction[] | null> {
         inputs: 1,
         outputs: 1,
         url: 'https://etherscan.io/tx/0x9f8e7d6c5b4a39281726354b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d',
-        amount: Math.floor(Math.random() * 25000) + 500
+        amount: Math.floor(Math.random() * 25000) + 5000
       },
       {
         network: 'USDT',
@@ -52,7 +52,7 @@ export async function fetchCryptoData(): Promise<CryptoTransaction[] | null> {
         inputs: 1,
         outputs: 1,
         url: 'https://etherscan.io/tx/0x1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b',
-        amount: Math.floor(Math.random() * 10000) + 100
+        amount: Math.floor(Math.random() * 10000) + 1000
       },
       // Add more networks
       {
@@ -63,7 +63,7 @@ export async function fetchCryptoData(): Promise<CryptoTransaction[] | null> {
         inputs: Math.floor(Math.random() * 3) + 1,
         outputs: Math.floor(Math.random() * 2) + 1,
         url: 'https://blockchair.com/bitcoin-cash/transaction/5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a',
-        amount: Math.floor(Math.random() * 15000) + 200
+        amount: Math.floor(Math.random() * 15000) + 2000
       },
       {
         network: 'LTC',
@@ -73,7 +73,7 @@ export async function fetchCryptoData(): Promise<CryptoTransaction[] | null> {
         inputs: Math.floor(Math.random() * 4) + 1,
         outputs: Math.floor(Math.random() * 2) + 1,
         url: 'https://blockchair.com/litecoin/transaction/7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d',
-        amount: Math.floor(Math.random() * 8000) + 50
+        amount: Math.floor(Math.random() * 8000) + 5000
       },
       {
         network: 'TRX',
@@ -83,7 +83,7 @@ export async function fetchCryptoData(): Promise<CryptoTransaction[] | null> {
         inputs: 1,
         outputs: 1,
         url: 'https://tronscan.org/#/transaction/9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b',
-        amount: Math.floor(Math.random() * 5000) + 10
+        amount: Math.floor(Math.random() * 5000) + 10000
       }
     ];
 

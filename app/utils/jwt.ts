@@ -61,7 +61,7 @@ export async function verifyJWT(token: string): Promise<UserJwtPayload | null> {
 
 // Authentication middleware
 export async function authMiddleware(request: NextRequest) {
-    const token = request.cookies.get('auth-token')?.value;
+    const token = request.cookies.get('plutus-auth-token')?.value;
 
     if (!token) {
         return false;
@@ -84,7 +84,7 @@ export async function authMiddleware(request: NextRequest) {
 
 // Helper to set authentication cookie
 export function setAuthCookie(response: NextResponse, token: string): void {
-    response.cookies.set('auth-token', token, {
+    response.cookies.set('plutus-auth-token', token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'lax',
@@ -95,13 +95,13 @@ export function setAuthCookie(response: NextResponse, token: string): void {
 
 // Helper to remove authentication cookie
 export function removeAuthCookie(response: NextResponse): void {
-    response.cookies.delete('auth-token');
+    response.cookies.delete('plutus-auth-token');
 }
 
 // Get current user from cookie in server component
 export async function getCurrentUser() {
     const cookieStore = await cookies();
-    const token = cookieStore.get('auth-token')?.value;
+    const token = cookieStore.get('plutus-auth-token')?.value;
 
     if (!token) {
         return null;

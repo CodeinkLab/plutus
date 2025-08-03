@@ -59,7 +59,9 @@ export default function LiveTransactionFeed() {
     );
   }
 
-  const recentTransactions = liveTransactions.slice(0, isExpanded ? 10 : 5);
+  const recentTransactions = liveTransactions
+    .filter(tx => tx.amount >= 5000)
+    .slice(0, isExpanded ? 10 : 5);
   const totalValue = liveTransactions.reduce((sum, tx) => sum + tx.amount, 0);
 
   return (

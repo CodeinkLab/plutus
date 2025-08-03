@@ -52,9 +52,9 @@ export const scrapeEthereumData = async () => {
 export const fetchTransactions = async () => {
     try {
         const results = await Promise.allSettled([
-            fetch('https://www.blockchain.com/explorer/_next/data/059d277/assets/btc.json?id=btc'),
-            fetch("https://www.blockchain.com/explorer/_next/data/059d277/assets/eth.json?id=eth"),
-            fetch("https://www.blockchain.com/explorer/_next/data/059d277/assets/bch.json?id=bch"),
+            fetch('https://www.blockchain.com/explorer/_next/data/f88d7b1/assets/btc.json?id=btc'),
+            fetch("https://www.blockchain.com/explorer/_next/data/f88d7b1/assets/eth.json?id=eth"),
+            fetch("https://www.blockchain.com/explorer/_next/data/f88d7b1/assets/bch.json?id=bch"),
             fetch("https://apilist.tronscanapi.com/api/token_trc20/transfers?limit=50&start=0&contract_address=TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t"),
             fetch("https://api.blockcypher.com/v1/ltc/main/txs?limit=100")
         ]);
@@ -153,8 +153,8 @@ export const fetchTransactions = async () => {
                 api: "https://api.blockcypher.com/v1/ltc/main/txs/" + tx.hash
             }))
 
-            /**/
         ];
+
 
         const trx = transactions.sort(() => Math.random() - 0.5).slice(0, 500).map((tx: any) => ({
             network: tx.network || "Unknown",
@@ -166,7 +166,6 @@ export const fetchTransactions = async () => {
             outputs: tx.outputs || 0,
             url: tx.url,
             api: tx.api
-
         }));
 
 

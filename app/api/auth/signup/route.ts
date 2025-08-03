@@ -40,6 +40,7 @@ export async function POST(request: NextRequest) {
     const baseEmailUrl = `${request.headers.get('x-forwarded-proto') || 'http'}://${request.headers.get('host')}`;
     const verificationUrl = `${baseEmailUrl}/verify-email/?token=${verificationToken}&email=${encodeURIComponent(email)}`;
 
+    console.log('Verification URL:', email, verificationUrl)
     // Send verification email
     await sendVerificationEmail(email, verificationUrl)
 
@@ -91,7 +92,7 @@ export async function POST(request: NextRequest) {
     return response
   } catch (error: any) {
     console.error('Signup error:', error.message)
-    throw new Error('Signup error: '+error.message || 'Failed to sign up')
+    throw new Error('Signup error: ' + error.message || 'Failed to sign up')
   } finally {
     await prisma.$disconnect();
   }

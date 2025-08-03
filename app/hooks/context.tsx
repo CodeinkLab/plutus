@@ -1,9 +1,10 @@
 'use client'
-import { useContext, createContext, useEffect, useState, ReactNode } from "react";
+import { useContext, createContext, useEffect, useState, ReactNode, useRef } from "react";
 import { ContentData, DialogState, PriceData } from "../utils/interfaces";
 import { BlockchainData, FormValues, Transaction } from "../utils/interfaces"
 import { defaultFormValues } from "../utils/declarations";
 import { fetchCryptoData } from "../lib/crypto-data";
+import { fetchTransactions } from "../lib/setup";
 
 
 
@@ -37,6 +38,8 @@ export function ContentProvider({ children }: { children: ReactNode }) {
 
     const [state, setState] = useState<DialogState>(stateObj)
 
+
+
     // Fetch crypto data using server function with polling
     useEffect(() => {
         let pollingInterval: NodeJS.Timeout;
@@ -47,13 +50,13 @@ export function ContentProvider({ children }: { children: ReactNode }) {
                 setIsOnline(true);
                 console.log("Fetching crypto data...");
                 
-                const data = await fetchCryptoData();
-                
+                const data = await fetchTransactions();
+
                 if (data && data.length > 0) {
                     setMultiTransactions(data);
                     setLiveTransactions(data);
-                    console.log("Received crypto data:", data);
-                    
+                    //console.log("Received crypto data:", data);
+
                     // If we have data, we can reduce polling frequency
                     if (isPolling) {
                         pollingInterval = setTimeout(pollCryptoData, 30000); // Poll every 30 seconds
@@ -68,7 +71,7 @@ export function ContentProvider({ children }: { children: ReactNode }) {
             } catch (error) {
                 console.error("Error fetching crypto data:", error);
                 setIsOnline(false);
-                
+
                 // Retry on error
                 if (isPolling) {
                     pollingInterval = setTimeout(pollCryptoData, 10000); // Retry every 10 seconds
@@ -153,12 +156,55 @@ export function ContentProvider({ children }: { children: ReactNode }) {
             }
         };
 
+        //showRandomTransactionPopup();
+
         // Show popup every 15-30 seconds randomly
         const randomInterval = Math.random() * 15000 + 15000; // 15-30 seconds
         const timer = setTimeout(showRandomTransactionPopup, randomInterval);
 
         return () => clearTimeout(timer);
     }, [liveTransactions, isOnline, showTransactionPopup]);
+
+
+    /* useEffect(() => {
+        const ws = new WebSocket('wss://ws.blockchain.info/coins')
+
+        ws.onopen = () => {
+            // Send subscription message
+            const coins = ['btc', 'eth', 'bch',]
+            coins.forEach((coin) => {
+                ws.send(JSON.stringify({
+                    coin,
+                    command: 'subscribe',
+                    entity: 'pending_transaction',
+                }))
+            })
+            console.log('Connected and subscribed to BTC pending transactions')
+        }
+
+        ws.onmessage = (event) => {
+            try {
+                const data = JSON.parse(event.data)
+                if (data.transaction) {
+                    console.log('Received message:', data)
+                }
+
+
+            } catch (err) {
+                console.error('Error parsing message:', err)
+            }
+        }
+
+        ws.onerror = (err) => {
+            console.error('WebSocket error:', err)
+        }
+
+        ws.onclose = () => {
+            console.log('WebSocket disconnected')
+        }
+
+        return () => ws.close()
+    }, []) */
 
     // Function to manually show transaction popup
     const showRandomTransaction = () => {

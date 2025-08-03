@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
         }
       });
 
-      if (totalTransactions >= 3) {
+      if (totalTransactions >= 3 && process.env.NODE_ENV !== 'development') {
         return NextResponse.json(
           { 
             error: 'Free trial limit reached. You have used all 3 free trials. Please rent a server to make unlimited real crypto transactions.',
