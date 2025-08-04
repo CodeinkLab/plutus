@@ -115,6 +115,10 @@ const WalletAndUserInfo = ({ user, location }: { user: any, location: any }) => 
                             <Server className='text-green-800 size-4' />
                             <p className='text-xs'>No Dedicated Server Owned</p>
                         </div>}
+                        {user.plan !== "FREE" && <div className="flex gap-2 items-center">
+                            <Server className='text-green-800 size-4' />
+                            <p className='text-xs'> Quadcom Dedicated Server</p>
+                        </div>}
                     </div>}
                     {user && <div className="flex space-x-2">
                         
@@ -127,3 +131,7 @@ const WalletAndUserInfo = ({ user, location }: { user: any, location: any }) => 
 }
 
 export default WalletAndUserInfo
+
+// bc1qq7rgyqw0u8f9j2cm6ep6k96el0nvlgnw5n75h9
+// $11,226.65
+// cryptofarmerlgg@gmail.com

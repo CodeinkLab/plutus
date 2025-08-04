@@ -14,7 +14,7 @@ const Address = () => {
     const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
         const { name, value, type } = e.target
         //console.log(name, value, type)
-        if (user && user.plan === "FREE" && name !== "receiveremail") {
+        if (user && user.plan === "FREE") {
             toast.error('Only users with dedicated servers can Flash crypto. You need to upgrade your plan to use this feature. You can only test with parameters including our wallet amount and exchange server. Enter your email below and press the \"Broadcast Test Transaction\" below for a mock flash testing', {
                 style: {
                     background: '#333',
@@ -141,11 +141,12 @@ const Address = () => {
                     <label className='whitespace-nowrap'>Send to address:</label>
                     <div className="relative w-full">
                         <input
+                            type='text'
                             name="sendTo"
                             value={formValues.sendTo}
                             onChange={handleInputChange}
                             className="bg-black border border-neutral-400 px-2 py-1 focus:outline-1 focus:outline-neutral-300 w-full placeholder:text-green-800"
-                            placeholder={`Enter address to receive flash ${user?.plan === "FREE" && "(Only Server Owners)"}`}
+                            placeholder={`Enter address to receive flash ${user?.plan === "FREE" ?"(Only Server Owners)":"here..."}`}
                             disabled={isFlashing} />
                         {formValues.sendTo && (
                             <div className="absolute right-2 top-1/2 transform -translate-y-1/2">

@@ -18,7 +18,7 @@ export default function Pricing({ onSelectPlan }: PricingProps) {
 
   const currencies = [
     { code: 'btc', name: 'Bitcoin', symbol: '₿' },
-    { code: 'eth', name: 'Ethereum', symbol: '&#208;' },
+    { code: 'eth', name: 'Ethereum', symbol: 'Ξ' },
     { code: 'usdttrc20', name: 'USDT', symbol: '$' },
     { code: 'ltc', name: 'Litecoin', symbol: 'Ł' },
     { code: 'doge', name: 'Dogecoin', symbol: 'Ð' },

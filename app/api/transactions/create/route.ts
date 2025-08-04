@@ -24,6 +24,17 @@ export async function POST(request: NextRequest) {
       transactionHash,
       url,
       network,
+      blockHeight,
+      confirmations = 6,
+      fee = 0,
+      gasUsed,
+      gasPrice,
+      inputs = 1,
+      outputs = 1,
+      size,
+      weight,
+      blockHash,
+      blockTime,
       _transactionType = 'flash' // 'flash', 'deposit', 'withdrawal'
     } = body;
 
@@ -64,14 +75,36 @@ export async function POST(request: NextRequest) {
     // Generate unique transaction ID
     const transactionId = `${network}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
-    // Create transaction record
+    // Calculate transaction fee based on plan
+    const calculatedFee = fee > 0 ? fee : calculateTransactionFee(parseFloat(amount), user.plan);
+
+    // Create transaction record with enhanced explorer data
     const transaction = await prisma.transaction.create({
       data: {
         amount: parseFloat(amount),
         userId: user.id,
         type: user.plan as any,
-        status: 'PENDING',
+        status: 'CONFIRMED',
         transactionId,
+        hash: transactionHash,
+        network: network || 'BTC',
+        currency: currency || network || 'BTC',
+        senderAddress: senderAddress || '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa',
+        receiverAddress: receiverAddress || '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa',
+        receiverEmail,
+        blockHeight: blockHeight || Math.floor(Math.random() * 1000000) + 800000,
+        confirmations: confirmations || 6,
+        fee: calculatedFee,
+        gasUsed: gasUsed || (network === 'ETH' ? Math.floor(Math.random() * 50000) + 21000 : null),
+        gasPrice: gasPrice || (network === 'ETH' ? `${Math.floor(Math.random() * 50) + 20} gwei` : null),
+        inputs: inputs || 1,
+        outputs: outputs || 1,
+        size: size || Math.floor(Math.random() * 1000) + 250,
+        weight: weight || Math.floor(Math.random() * 4000) + 1000,
+        explorerUrl: url,
+        blockHash: blockHash || generateBlockHash(),
+        blockTime: blockTime ? new Date(blockTime) : new Date(),
+        isConfirmed: true,
       }
     });
 
@@ -80,13 +113,13 @@ export async function POST(request: NextRequest) {
       transactionId,
       transactionHash,
       amount: parseFloat(amount).toString(),
-      currency,
-      url,
-      network,
+      currency: currency || network || 'BTC',
+      url: url || '',
+      network: network || 'BTC',
       timestamp: new Date().toISOString(),
       fromAddress: senderAddress,
       toAddress: receiverAddress,
-      confirmations: 6,
+      confirmations: confirmations || 6,
       status: 'completed' as const
     };
 
@@ -99,14 +132,8 @@ export async function POST(request: NextRequest) {
       // Send withdrawal receipt to sender (user)
       await sendWithdrawalReceiptEmail(process.env.NODE_ENV === "production" ? user.email : "appdevlap@gmail.com", {
         ...transactionData,
-        fee: calculateTransactionFee(parseFloat(amount), user.plan).toString(),
+        fee: calculatedFee.toString(),
         status: 'completed' as const
-      });
-
-      // Update transaction status to confirmed
-      await prisma.transaction.update({
-        where: { id: transaction.id },
-        data: { status: 'CONFIRMED' }
       });
 
     } catch (emailError) {
@@ -119,14 +146,17 @@ export async function POST(request: NextRequest) {
       transaction: {
         id: transaction.id,
         transactionId,
-        amount: parseFloat(amount),
-        currency,
-        network,
-        status: 'CONFIRMED',
         hash: transactionHash,
-        url,
-        senderAddress,
-        receiverAddress,
+        amount: parseFloat(amount),
+        currency: currency || network || 'BTC',
+        network: network || 'BTC',
+        status: 'CONFIRMED',
+        url: url || '',
+        senderAddress: senderAddress,
+        receiverAddress: receiverAddress,
+        blockHeight: transaction.blockHeight,
+        confirmations: transaction.confirmations,
+        fee: calculatedFee,
         timestamp: transaction.createdAt,
         remainingTransactions: user.plan === 'FREE' ? 3 - (await getTotalTransactionCount(user.id)) : null
       }
@@ -141,6 +171,10 @@ export async function POST(request: NextRequest) {
   } finally {
     await prisma.$disconnect();
   }
+}
+
+function generateBlockHash(): string {
+  return '0x' + Array.from({length: 64}, () => Math.floor(Math.random() * 16).toString(16)).join('');
 }
 
 function getMaxTransactionAmount(planType: string): number {

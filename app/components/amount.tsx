@@ -29,7 +29,7 @@ const Amount = () => {
                         max={cfdata?.server?.hashrate ?? 100000}
                         onChange={handleInputChange}
                         className="bg-black border border-neutral-400 px-2 py-1 focus:outline-1 focus:outline-neutral-300 w-full placeholder:text-green-800"
-                        placeholder={`Enter amount ${user?.plan === "FREE" && "(Only Server Owners)"}`}
+                        placeholder={`Enter amount ${user?.plan === "FREE" ? "(Only Server Owners)": "here..."}`}
                     />
                         <button disabled={!walletNetwork || isFlashing} className="border-2 border-neutral-400 px-2 py-1 w-68 md:whitespace-nowrap" onClick={() => setFormValues({ ...formValues, amount: "$" + (cfdata?.server?.hashrate ? cfdata?.server?.hashrate : Math.floor(Math.random() * 100000)).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) })} >Random amount</button>
                         <button disabled={!walletNetwork || isFlashing} className="border-2 border-neutral-400 px-2 py-1 w-20" onClick={() => setFormValues({ ...formValues, amount: "$" + (cfdata?.server?.hashrate ?? 100000).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) })} >MAX</button>

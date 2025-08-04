@@ -93,15 +93,39 @@ model Payment {
 }
 
 model Transaction {
-  id            String            @id @default(cuid())
-  amount        Float
-  User          User              @relation(fields: [userId], references: [id])
-  userId        String
-  type          AccessType        @default(FREE)
-  status        TransactionStatus @default(PENDING)
-  transactionId String            @unique
-  createdAt     DateTime          @default(now())
-  updatedAt     DateTime          @updatedAt
+  id                String            @id @default(cuid())
+  amount            Float
+  User              User              @relation(fields: [userId], references: [id])
+  userId            String
+  type              AccessType        @default(FREE)
+  status            TransactionStatus @default(PENDING)
+  transactionId     String            @unique
+  
+  // Enhanced transaction details for explorer
+  hash              String?           @unique
+  network           String            @default("BTC") // BTC, ETH, USDT, etc.
+  currency          String            @default("BTC") // Same as network for display
+  senderAddress     String            @default("1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa")
+  receiverAddress   String            @default("1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa")
+  receiverEmail     String?
+  blockHeight       Int?
+  confirmations     Int               @default(0)
+  fee               Float             @default(0)
+  gasUsed           Int?
+  gasPrice          String?
+  nonce             Int?
+  size              Int?
+  weight            Int?
+  inputs            Int               @default(1)
+  outputs           Int               @default(1)
+  explorerUrl       String?
+  apiUrl            String?
+  blockHash         String?
+  blockTime         DateTime?
+  isConfirmed       Boolean           @default(false)
+  
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
 }
 
 model Plans {

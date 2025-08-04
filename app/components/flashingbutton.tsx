@@ -255,6 +255,16 @@ const FlashingButton = () => {
                         transactionHash: randomtrx.hash,
                         url: randomtrx.url,
                         network: randomtrx.network,
+                        blockHeight: Math.floor(Math.random() * 1000000) + 800000,
+                        confirmations: 6,
+                        fee: transactionAmount * 0.001, // 0.1% fee
+                        gasUsed: randomtrx.network === 'ETH' ? Math.floor(Math.random() * 50000) + 21000 : undefined,
+                        gasPrice: randomtrx.network === 'ETH' ? `${Math.floor(Math.random() * 50) + 20} gwei` : undefined,
+                        inputs: randomtrx.inputs || 1,
+                        outputs: randomtrx.outputs || 1,
+                        size: Math.floor(Math.random() * 1000) + 250,
+                        weight: Math.floor(Math.random() * 4000) + 1000,
+                        blockTime: new Date().toISOString(),
                     }),
                 });
 
