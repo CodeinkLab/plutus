@@ -37,6 +37,18 @@ export default async function Home() {
         <div>
           {/* <p className="text-red-500">Notice: System is currently undergoing maintenance. Every user has to sign up for a new account</p>  */}
         </div>
+        
+          <p className="text-sm text-green-400">
+            Get 
+            <a
+              href="https://t.me/GXCWither"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline hover:text-green-600 ml-1"
+            >
+              Help & Support
+            </a>
+          </p>
         <div className="mt-4 p-3 bg-green-900/20 border border-green-800/30 rounded-md">
           <p className="text-sm text-green-400">
             💡Get Coupon Codes codes
