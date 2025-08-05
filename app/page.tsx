@@ -38,6 +38,7 @@ export default async function Home() {
           {/* <p className="text-red-500">Notice: System is currently undergoing maintenance. Every user has to sign up for a new account</p>  */}
         </div>
         
+        <div className="flex items-center gap-4 justify-between mt-4 p-3 bg-green-900/20 border border-green-800/30 rounded-md">
           <p className="text-sm text-green-400">
             Get 
             <a
@@ -49,7 +50,6 @@ export default async function Home() {
               Help & Support
             </a>
           </p>
-        <div className="mt-4 p-3 bg-green-900/20 border border-green-800/30 rounded-md">
           <p className="text-sm text-green-400">
             💡Get Coupon Codes codes
             <a
