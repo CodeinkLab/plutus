@@ -33,12 +33,12 @@ export default async function Home() {
 
   return (
     <main className="max-w-5xl mx-auto flex flex-col h-full w-full mt-8 items-center px-4 text-green-800 gap-4">
-      <div className="py-2 mt-8 flex items-center justify-between w-full">
+      <div className="py-2 mt-8 flex flex-col items-center justify-between w-full">
         <div>
           {/* <p className="text-red-500">Notice: System is currently undergoing maintenance. Every user has to sign up for a new account</p>  */}
         </div>
         <div className="mt-4 p-3 bg-green-900/20 border border-green-800/30 rounded-md">
-          <p className="text-xs text-green-400">
+          <p className="text-sm text-green-400">
             💡Get Coupon Codes codes
             <a
               href="https://t.me/+cQ-BabDBEbM0MGE0"
