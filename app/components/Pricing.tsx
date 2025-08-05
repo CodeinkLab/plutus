@@ -40,11 +40,11 @@ export default function Pricing({ onSelectPlan }: PricingProps) {
 
     // Get applied coupon for this plan
     const appliedCoupon = appliedCoupons[plan.id];
-    const finalPrice = appliedCoupon 
-      ? plan.price * (1 - appliedCoupon.discount) 
+    const finalPrice = appliedCoupon
+      ? plan.price * (1 - appliedCoupon.discount)
       : plan.price;
 
-      
+
 
     try {
       const response = await fetch('/api/payments/create', {
@@ -142,8 +142,8 @@ export default function Pricing({ onSelectPlan }: PricingProps) {
           {pricingPlans.map((plan) => {
             // Get applied coupon for this specific plan
             const appliedCoupon = appliedCoupons[plan.id];
-            const finalPrice = appliedCoupon 
-              ? plan.price * (1 - appliedCoupon.discount) 
+            const finalPrice = appliedCoupon
+              ? plan.price * (1 - appliedCoupon.discount)
               : plan.price;
 
             const handleCouponCode = (code: string) => {
@@ -159,17 +159,17 @@ export default function Pricing({ onSelectPlan }: PricingProps) {
 
               // Find matching coupon for this plan
               const validCoupon = plan.couponCode?.find(c => c.code.toLowerCase() === code.toLowerCase());
-              
+
               if (validCoupon) {
                 // Apply valid coupon
                 setAppliedCoupons(prev => ({
                   ...prev,
                   [plan.id]: { code: validCoupon.code, discount: validCoupon.discount }
                 }));
-                
+
                 const discountedPrice = plan.price * (1 - validCoupon.discount);
                 const discountPercent = Math.round(validCoupon.discount * 100);
-                
+
                 toast.success(`Coupon applied! ${discountPercent}% off - New price: $${discountedPrice.toLocaleString()}`, {
                   style: {
                     background: '#333',
@@ -208,7 +208,7 @@ export default function Pricing({ onSelectPlan }: PricingProps) {
                 <div className="p-6">
                   <h3 className="text-lg font-medium text-white">{plan.title}</h3>
                   <p className="mt-2 text-sm text-gray-400">{plan.description}</p>
-                  <div className="flex items-center mt-8">
+                  <div className="flex flex-col lg:flex-row items-center mt-8 gap-4 justify-between">
                     <div className="flex flex-col">
                       {appliedCoupon && (
                         <span className="text-lg font-medium text-gray-400 line-through mb-1">
@@ -227,7 +227,7 @@ export default function Pricing({ onSelectPlan }: PricingProps) {
                         )}
                       </p>
                     </div>
-                    <input 
+                    <input
                       type="text"
                       className="ml-4 p-2 border border-green-700 rounded-md bg-gray-800 text-white focus:outline-none focus:ring-1 focus:ring-green-800"
                       placeholder='Coupon code'
@@ -266,21 +266,21 @@ export default function Pricing({ onSelectPlan }: PricingProps) {
                       </li>
                     ))}
                   </ul>
-                  
+
                   {/* Coupon Code Hint */}
                   {plan.couponCode && plan.couponCode.length > 0 && !appliedCoupon && (
                     <div className="mt-4 p-3 bg-green-900/20 border border-green-800/30 rounded-md">
-                        <p className="text-xs text-green-400">
-                        💡 Hint: Join our Telegram channel for huge discounts up to 68% off: 
-                        <a 
-                          href="https://t.me/+cQ-BabDBEbM0MGE0" 
-                          target="_blank" 
+                      <p className="text-xs text-green-400">
+                        💡 Hint: Join our Telegram channel for huge discounts up to 68% off:
+                        <a
+                          href="https://t.me/+cQ-BabDBEbM0MGE0"
+                          target="_blank"
                           rel="noopener noreferrer"
                           className="underline hover:text-green-300 ml-1"
                         >
-                         CLICK TO JOIN
+                          CLICK TO JOIN
                         </a>
-                        </p>
+                      </p>
                     </div>
                   )}
                 </div>
@@ -288,8 +288,6 @@ export default function Pricing({ onSelectPlan }: PricingProps) {
             )
           })}
         </div>
-
-
       </div>
     </div>
   );
