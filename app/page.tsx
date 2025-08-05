@@ -33,7 +33,7 @@ export default async function Home() {
 
   return (
     <main className="max-w-5xl mx-auto flex flex-col h-full w-full mt-8 items-center px-4 text-green-800 gap-4">
-      <div className="py-2 mt-8 flex flex-col items-center justify-between w-full">
+      <div className="py-2 mt-4 flex flex-col items-center justify-between w-full">
         <div>
           {/* <p className="text-red-500">Notice: System is currently undergoing maintenance. Every user has to sign up for a new account</p>  */}
         </div>
