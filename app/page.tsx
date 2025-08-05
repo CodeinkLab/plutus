@@ -28,22 +28,35 @@ export default async function Home() {
     email: `ctfllg@flex.com`,
     plan: ["VIP"/* , "PREMIUM", "PRO" */][Math.floor(Math.random() * 1)],
   }
-  const finalLocation = process.env.NODE_ENV === "production" ? location : {"ip":"182.3.36.4","country":"Indonesia","countryCode":"ID","city":"Jakarta","region":"Jakarta Raya","currencyname":"Indonesian Rupiah","currencycode":"IDR","currencysymbol":"Rp","flag":"https://ipdata.co/flags/id.png","continent":"Asia","continentcode":"AS","latitude":-6.220799922943115,"longitude":106.84030151367188,"timezone":"Asia/Jakarta","abbr":"WIB","currenttime":"2025-08-03T06:15:32+07:00"}
+  const finalLocation = process.env.NODE_ENV === "production" ? location : { "ip": "182.3.36.4", "country": "Indonesia", "countryCode": "ID", "city": "Jakarta", "region": "Jakarta Raya", "currencyname": "Indonesian Rupiah", "currencycode": "IDR", "currencysymbol": "Rp", "flag": "https://ipdata.co/flags/id.png", "continent": "Asia", "continentcode": "AS", "latitude": -6.220799922943115, "longitude": 106.84030151367188, "timezone": "Asia/Jakarta", "abbr": "WIB", "currenttime": "2025-08-03T06:15:32+07:00" }
 
 
   return (
     <main className="max-w-5xl mx-auto flex flex-col h-full w-full mt-8 items-center px-4 text-green-800 gap-4">
-        <div className="py-2 mt-8 flex items-center justify-between w-full">
-          <div>
-            {/* <p className="text-red-500">Notice: System is currently undergoing maintenance. Every user has to sign up for a new account</p>  */}
-          </div>
-          {/*< Link 
+      <div className="py-2 mt-8 flex items-center justify-between w-full">
+        <div>
+          {/* <p className="text-red-500">Notice: System is currently undergoing maintenance. Every user has to sign up for a new account</p>  */}
+        </div>
+        <div className="mt-4 p-3 bg-green-900/20 border border-green-800/30 rounded-md">
+          <p className="text-xs text-green-400">
+            💡Get Coupon Codes codes
+            <a
+              href="https://t.me/+cQ-BabDBEbM0MGE0"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline hover:text-green-600 ml-1"
+            >
+              From Here
+            </a>
+          </p>
+        </div>
+        {/*< Link 
             href="/explorer" 
             className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors text-sm flex items-center gap-2"
           >
             🔍 Transaction Explorer
           </Link> */}
-        </div> 
+      </div>
       <ServersDropDownComponent />
       <Address />
 
