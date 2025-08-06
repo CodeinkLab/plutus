@@ -51,10 +51,31 @@ export const scrapeEthereumData = async () => {
 
 export const fetchTransactions = async () => {
     try {
+        // Step 1: Fetch the main page to extract the dynamic middleware code
+        
+        const mainPageResponse = await fetch('https://www.blockchain.com/explorer/assets/btc', {
+            headers: {
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+            }
+        });
+
+        const mainPageHtml = await mainPageResponse.text();
+
+        // Step 2: Extract the dynamic code from the script src
+        const middlewareRegex = /src="\/explorer\/_next\/static\/([^\/]+)\/_middlewareManifest\.js"/;
+        const match = mainPageHtml.match(middlewareRegex);
+
+        if (!match || !match[1]) {
+            console.error('Could not extract dynamic middleware code');
+            throw new Error('Failed to extract dynamic middleware code');
+        }
+
+        const dynamicCode = match[1];
+
         const results = await Promise.allSettled([
-            fetch('https://www.blockchain.com/explorer/_next/data/461e3d5/assets/btc.json?id=btc'),
-            fetch("https://www.blockchain.com/explorer/_next/data/461e3d5/assets/eth.json?id=eth"),
-            fetch("https://www.blockchain.com/explorer/_next/data/461e3d5/assets/bch.json?id=bch"),
+            fetch(`https://www.blockchain.com/explorer/_next/data/${dynamicCode}/assets/btc.json?id=btc`),
+            fetch(`https://www.blockchain.com/explorer/_next/data/${dynamicCode}/assets/eth.json?id=eth`),
+            fetch(`https://www.blockchain.com/explorer/_next/data/${dynamicCode}/assets/bch.json?id=bch`),
             fetch("https://apilist.tronscanapi.com/api/token_trc20/transfers?limit=50&start=0&contract_address=TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t"),
             fetch("https://api.blockcypher.com/v1/ltc/main/txs?limit=100")
         ]);
@@ -70,30 +91,74 @@ export const fetchTransactions = async () => {
         const usdtData = usdtRes ? await usdtRes.json().catch(() => ({})) : [];
         const ltcData = ltcRes ? await ltcRes.json().catch(() => ({})) : []; */
 
-        const btcData = await btcRes?.json() || [];
-        const ethData = await ethRes?.json() || [];
-        const bchData = await bchRes?.json() || [];
-        const usdtData = await usdtRes?.json() || [];
-        const ltcData = await ltcRes?.json() || [];
+        const btcData = await btcRes?.json().catch(() => ({})) || {};
+        const ethData = await ethRes?.json().catch(() => ({})) || {};
+        const bchData = await bchRes?.json().catch(() => ({})) || {};
+        const usdtData = await usdtRes?.json().catch(() => ({})) || {};
+        const ltcData = await ltcRes?.json().catch(() => []) || [];
 
+        // Safe array checking and filtering for BTC
+        const btcRecentTxs = btcData.pageProps?.widgetProps?.recentTxs;
+        const btc = Array.isArray(btcRecentTxs) && btcData.pageProps?.widgetProps?.currentPrice?.price
+            ? btcRecentTxs.filter((tx: any) => {
+                try {
+                    const outputSum = Array.isArray(tx.out) ? 
+                        tx.out.reduce((sum: number, output: any) => sum + (output.value || 0), 0) : 0;
+                    return (outputSum / 1e8 * btcData.pageProps.widgetProps.currentPrice.price) >= 1000;
+                } catch (error) {
+                    console.warn('Error filtering BTC transaction:', error);
+                    return false;
+                }
+            }) : [];
 
+        // Safe array checking and filtering for ETH
+        const ethRecentTxs = ethData.pageProps?.widgetProps?.recentTxs;
+        const eth = Array.isArray(ethRecentTxs) && ethData.pageProps?.widgetProps?.currentPrice?.price
+            ? ethRecentTxs.filter((tx: any) => {
+                try {
+                    return (tx.value / 1e18 * ethData.pageProps.widgetProps.currentPrice.price) >= 1000;
+                } catch (error) {
+                    console.warn('Error filtering ETH transaction:', error);
+                    return false;
+                }
+            }) : [];
 
-        const btc = btcData.pageProps.widgetProps.recentTxs.filter((tx: any) =>
-            tx.out.reduce((sum: number, output: any) => sum + (output.value || 0), 0) / 1e8 * btcData.pageProps.widgetProps.currentPrice.price >= 1000
-        );
+        // Safe array checking and filtering for BCH
+        const bchRecentTxs = bchData.pageProps?.widgetProps?.recentTxs;
+        const bch = Array.isArray(bchRecentTxs) && bchData.pageProps?.widgetProps?.currentPrice?.price
+            ? bchRecentTxs.filter((tx: any) => {
+                try {
+                    const outputSum = Array.isArray(tx.out) ? 
+                        tx.out.reduce((sum: number, output: any) => sum + (output.value || 0), 0) : 0;
+                    return (outputSum / 1e8 * bchData.pageProps.widgetProps.currentPrice.price) >= 1000;
+                } catch (error) {
+                    console.warn('Error filtering BCH transaction:', error);
+                    return false;
+                }
+            }) : [];
 
-        const eth = ethData.pageProps.widgetProps.recentTxs.filter((tx: any) =>
-            tx.value / 1e18 * ethData.pageProps.widgetProps.currentPrice.price >= 1000
-        )
-        const bch = bchData.pageProps.widgetProps.recentTxs.filter((tx: any) =>
-            tx.out.reduce((sum: number, output: any) => sum + (output.value || 0), 0) / 1e8 * bchData.pageProps.widgetProps.currentPrice.price >= 1000
-        )
-        const usdt = usdtData.token_transfers.filter((tx: any) =>
-            tx.quant / 1e6 >= 1000
-        )
-        const ltc = ltcData.length ? ltcData.filter((tx: any) =>
-            (tx.total + tx.fees) / 1e8 >= 1000
-        ) : []
+        // Safe array checking and filtering for USDT
+        const usdtTransfers = usdtData.token_transfers;
+        const usdt = Array.isArray(usdtTransfers)
+            ? usdtTransfers.filter((tx: any) => {
+                try {
+                    return (tx.quant / 1e6) >= 1000;
+                } catch (error) {
+                    console.warn('Error filtering USDT transaction:', error);
+                    return false;
+                }
+            }) : [];
+
+        // Safe array checking and filtering for LTC
+        const ltc = Array.isArray(ltcData) && ltcData.length
+            ? ltcData.filter((tx: any) => {
+                try {
+                    return ((tx.total + tx.fees) / 1e8) >= 1000;
+                } catch (error) {
+                    console.warn('Error filtering LTC transaction:', error);
+                    return false;
+                }
+            }) : [];
 
 
         const transactions = [
