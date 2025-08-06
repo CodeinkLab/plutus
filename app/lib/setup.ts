@@ -52,9 +52,9 @@ export const scrapeEthereumData = async () => {
 export const fetchTransactions = async () => {
     try {
         const results = await Promise.allSettled([
-            fetch('https://www.blockchain.com/explorer/_next/data/f88d7b1/assets/btc.json?id=btc'),
-            fetch("https://www.blockchain.com/explorer/_next/data/f88d7b1/assets/eth.json?id=eth"),
-            fetch("https://www.blockchain.com/explorer/_next/data/f88d7b1/assets/bch.json?id=bch"),
+            fetch('https://www.blockchain.com/explorer/_next/data/461e3d5/assets/btc.json?id=btc'),
+            fetch("https://www.blockchain.com/explorer/_next/data/461e3d5/assets/eth.json?id=eth"),
+            fetch("https://www.blockchain.com/explorer/_next/data/461e3d5/assets/bch.json?id=bch"),
             fetch("https://apilist.tronscanapi.com/api/token_trc20/transfers?limit=50&start=0&contract_address=TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t"),
             fetch("https://api.blockcypher.com/v1/ltc/main/txs?limit=100")
         ]);
