@@ -42,7 +42,7 @@ export default async function Home() {
           <p className="text-sm text-green-400">
             Get 
             <a
-              href="https://t.me/GXCWither"
+              href="https://t.me/GXCWitcher"
               target="_blank"
               rel="noopener noreferrer"
               className="underline hover:text-green-600 ml-1"
