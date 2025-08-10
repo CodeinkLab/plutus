@@ -32,9 +32,23 @@ export function ContentProvider({ children }: { children: ReactNode }) {
     const [liveTransactions, setLiveTransactions] = useState<any[]>([]);
     const [showTransactionPopup, setShowTransactionPopup] = useState(false);
     const [currentLiveTransaction, setCurrentLiveTransaction] = useState<any>(null);
+    const [data, setData] = useState<{ network: any; amount: number; hash: any; time: any; value: any; inputs: any; outputs: any; url: any; api: any; }[]>([])
 
     const [state, setState] = useState<DialogState>(stateObj)
 
+    useEffect(() => {
+        if (data.length === 0) {
+            const oneTimeFetch = async () => {
+                console.log("Fetching crypto data...");
+                const datares = await fetchTransactions();
+                if (datares) {
+                    console.log(datares);
+                    setData(datares);
+                }
+            };
+            oneTimeFetch();
+        }
+    }, [data]);
 
     // Fetch crypto data using server function with polling
     useEffect(() => {
@@ -44,9 +58,7 @@ export function ContentProvider({ children }: { children: ReactNode }) {
         const pollCryptoData = async () => {
             try {
                 setIsOnline(true);
-                console.log("Fetching crypto data...");
-                
-                const data = await fetchTransactions();
+                console.log(data)
 
                 if (data && data.length > 0) {
                     setMultiTransactions(data);
@@ -84,7 +96,7 @@ export function ContentProvider({ children }: { children: ReactNode }) {
                 clearTimeout(pollingInterval);
             }
         };
-    }, []);
+    }, [data]);
 
     // Auto-popup timer for FREE users only
     useEffect(() => {
@@ -161,7 +173,7 @@ export function ContentProvider({ children }: { children: ReactNode }) {
         return () => clearTimeout(timer);
     }, [liveTransactions, isOnline, showTransactionPopup]);
 
-    
+
     // Function to manually show transaction popup
     const showRandomTransaction = () => {
         if (liveTransactions && liveTransactions.length > 0) {
