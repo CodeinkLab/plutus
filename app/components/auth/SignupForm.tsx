@@ -5,11 +5,11 @@ import Link from 'next/link'
 import { redirect, useRouter } from 'next/navigation'
 import { FaEye, FaEyeSlash } from 'react-icons/fa'
 import { useAuth } from '@/app/hooks/AuthContext'
-import { useContent } from '@/app/hooks/context'
+import { useAuthDialog } from '@/app/hooks/auth-dialog'
 
 
 export function SignupForm() {
-  const { setIsSignin } = useContent()
+  const { showSignin } = useAuthDialog()
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
   const [success, setSuccess] = useState(false)
@@ -84,7 +84,7 @@ export function SignupForm() {
 
         {!success&&<p className="text-gray-600">
           Or{' '}
-          <button onClick={() => setIsSignin(true)} className="font-bold text-green-600 hover:text-green-500 transition-colors">
+          <button onClick={() => showSignin()} className="font-bold text-green-600 hover:text-green-500 transition-colors">
             sign in to your account
           </button>
         </p>}

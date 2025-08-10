@@ -4,7 +4,7 @@
 import { createContext, useContext, ReactNode, useEffect } from 'react'
 import { XMarkIcon, CheckCircleIcon, ExclamationTriangleIcon, InformationCircleIcon } from '@heroicons/react/24/outline'
 import { DialogState } from '../utils/interfaces'
-import { useContent } from '../hooks/context'
+import { useContent } from './context'
 
 
 
@@ -71,7 +71,7 @@ export function DialogProvider({ children }: { children: ReactNode }) {
                   }}
                   className="px-4 py-2 rounded-lg bg-gray-700 text-gray-300 hover:bg-gray-600 transition-colors"
                 >
-                  Cancel
+                  {state.cancelText || 'Cancel'}
                 </button>
               )}
               <button
@@ -81,7 +81,7 @@ export function DialogProvider({ children }: { children: ReactNode }) {
                 }}
                 className="px-4 py-2 rounded-lg bg-green-800 text-white hover:bg-green-700 transition-colors"
               >
-                {state.type === 'progress' ? 'Close' : 'OK'}
+                {state.type === 'progress' ? 'Close' : state.okText || 'OK'}
               </button>
             </div>
           </div>}
@@ -104,7 +104,7 @@ export function DialogProvider({ children }: { children: ReactNode }) {
                   }}
                   className="px-4 py-2 rounded-lg bg-gray-700 text-gray-300 hover:bg-gray-600 transition-colors"
                 >
-                  Cancel
+                  {state.cancelText || 'Cancel'}
                 </button>
                 <button
                   onClick={() => {
@@ -113,7 +113,7 @@ export function DialogProvider({ children }: { children: ReactNode }) {
                   }}
                   className="px-4 py-2 rounded-lg bg-green-800 text-white hover:bg-green-700 transition-colors"
                 >
-                  continue
+                  {state.okText || 'Continue'}
                 </button>
               </div>}
             </div>

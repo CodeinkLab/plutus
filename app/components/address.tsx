@@ -1,7 +1,7 @@
 
 'use client'
 import React from 'react'
-import { CheckCircleIcon, XCircleIcon, ListBulletIcon, QrCodeIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline'
+import { CheckCircleIcon, XCircleIcon} from '@heroicons/react/24/outline'
 import { useAuth } from '../hooks/AuthContext'
 import { useContent } from '../hooks/context'
 import { toast } from 'react-hot-toast'
@@ -26,8 +26,6 @@ const Address = () => {
             });
             return;
         }
-
-
         if (type === 'checkbox') {
             setFormValues({
                 ...formValues,

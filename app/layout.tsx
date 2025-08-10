@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import "./globals.css"
 import localFont from 'next/font/local'
-import { DialogProvider } from "@/app/lib/dialog"
+import { DialogProvider } from "@/app/hooks/dialog"
 import { Toaster } from "react-hot-toast";
 import { ContentProvider } from "./hooks/context";
 import { AuthProvider } from "./hooks/AuthContext";
@@ -94,10 +94,12 @@ export default function RootLayout({
         <Toaster />
         <AuthProvider>
           <ContentProvider>
-            <DialogProvider>
-              {children}
-              <LiveTransactionPopup />
-            </DialogProvider>
+            <AuthProvider>
+              <DialogProvider>
+                {children}
+                <LiveTransactionPopup />
+              </DialogProvider>
+            </AuthProvider>
           </ContentProvider>
         </AuthProvider>
       </body>

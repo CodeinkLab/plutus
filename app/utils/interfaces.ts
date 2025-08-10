@@ -122,8 +122,8 @@ export interface ContentData {
   setCfdata: (data: any | any) => void
   logData: string[] | any[]
   setLogData: (data: string[] | any[]) => void
-  isSignin: boolean
-  setIsSignin: (data: boolean) => void
+  dialogType: 'login' | 'register' | 'dialog'
+  setDialogType: (data: 'login' | 'register' | 'dialog') => void
   multiTransactions: any[]
   setMultiTransactions: (data: any[]) => void
   state: DialogState
@@ -152,4 +152,6 @@ export interface DialogState {
   component?: ReactNode
   close?: () => void
   controls?: boolean
+  okText?: string
+  cancelText?: string
 }

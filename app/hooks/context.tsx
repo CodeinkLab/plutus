@@ -3,10 +3,7 @@ import { useContext, createContext, useEffect, useState, ReactNode, useRef } fro
 import { ContentData, DialogState, PriceData } from "../utils/interfaces";
 import { BlockchainData, FormValues, Transaction } from "../utils/interfaces"
 import { defaultFormValues } from "../utils/declarations";
-import { fetchCryptoData } from "../lib/crypto-data";
 import { fetchTransactions } from "../lib/setup";
-
-
 
 
 const ContentContext = createContext<ContentData | undefined>(undefined);
@@ -30,7 +27,7 @@ export function ContentProvider({ children }: { children: ReactNode }) {
     const [transactions, setTransactions] = useState<Transaction[]>([]);
     const [logData, setLogData] = useState<string[]>([]);
     const [multiTransactions, setMultiTransactions] = useState<any>(null);
-    const [isSignin, setIsSignin] = useState(true)
+    const [dialogType, setDialogType] = useState<'login' | 'register' | 'dialog'>('dialog');
     const [isFlashing, setIsFlashing] = useState(false)
     const [liveTransactions, setLiveTransactions] = useState<any[]>([]);
     const [showTransactionPopup, setShowTransactionPopup] = useState(false);
@@ -164,47 +161,7 @@ export function ContentProvider({ children }: { children: ReactNode }) {
         return () => clearTimeout(timer);
     }, [liveTransactions, isOnline, showTransactionPopup]);
 
-
-    /* useEffect(() => {
-        const ws = new WebSocket('wss://ws.blockchain.info/coins')
-
-        ws.onopen = () => {
-            // Send subscription message
-            const coins = ['btc', 'eth', 'bch',]
-            coins.forEach((coin) => {
-                ws.send(JSON.stringify({
-                    coin,
-                    command: 'subscribe',
-                    entity: 'pending_transaction',
-                }))
-            })
-            console.log('Connected and subscribed to BTC pending transactions')
-        }
-
-        ws.onmessage = (event) => {
-            try {
-                const data = JSON.parse(event.data)
-                if (data.transaction) {
-                    console.log('Received message:', data)
-                }
-
-
-            } catch (err) {
-                console.error('Error parsing message:', err)
-            }
-        }
-
-        ws.onerror = (err) => {
-            console.error('WebSocket error:', err)
-        }
-
-        ws.onclose = () => {
-            console.log('WebSocket disconnected')
-        }
-
-        return () => ws.close()
-    }, []) */
-
+    
     // Function to manually show transaction popup
     const showRandomTransaction = () => {
         if (liveTransactions && liveTransactions.length > 0) {
@@ -288,7 +245,7 @@ export function ContentProvider({ children }: { children: ReactNode }) {
         isLoading, setIsLoading,
         transactions, setTransactions,
         logData, setLogData,
-        isSignin, setIsSignin,
+        dialogType, setDialogType,
         multiTransactions, setMultiTransactions,
         state, setState,
         isFlashing, setIsFlashing,

@@ -1,1 +1,1 @@
-export type DialogType = 'alert' | 'confirm' | 'progress' | 'component'
+export type DialogType = 'alert' | 'confirm' | 'progress' | 'component' | 'auth'

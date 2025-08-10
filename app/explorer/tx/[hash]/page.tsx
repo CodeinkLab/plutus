@@ -134,10 +134,10 @@ const TransactionDetailPage = () => {
             <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
             <h1 className="text-3xl font-bold mb-4">Transaction Not Found</h1>
             <p className="text-gray-400 mb-8">{error}</p>
-            <Link href="/explorer" className="inline-flex items-center gap-2 px-6 py-3 bg-green-600 hover:bg-green-700 rounded-lg transition-colors">
+            {/* <Link href="/explorer" className="inline-flex items-center gap-2 px-6 py-3 bg-green-600 hover:bg-green-700 rounded-lg transition-colors">
               <ArrowLeft className="w-4 h-4" />
               Back to Explorer
-            </Link>
+            </Link> */}
           </div>
         </div>
       </div>
@@ -155,10 +155,10 @@ const TransactionDetailPage = () => {
         <div className="container mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <Link href="/explorer" className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors">
+              {/* <Link href="/explorer" className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors">
                 <ArrowLeft className="w-5 h-5" />
                 Back to Explorer
-              </Link>
+              </Link> */}
               <div>
                 <h1 className="text-2xl font-bold">Transaction Details</h1>
                 <p className="text-gray-400">View complete transaction information</p>
@@ -177,7 +177,7 @@ const TransactionDetailPage = () => {
       </div>
 
       <div className="container mx-auto px-4 py-8">
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-8xl mx-auto">
           {/* Transaction Hash */}
           <div className="bg-gray-800 rounded-lg border border-gray-700 p-6 mb-6">
             <div className="flex items-center justify-between mb-4">

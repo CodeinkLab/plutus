@@ -5,11 +5,11 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { redirect, useRouter } from 'next/navigation'
 import { useAuth } from '@/app/hooks/AuthContext'
-import { useContent } from '@/app/hooks/context'
+import { useAuthDialog } from '@/app/hooks/auth-dialog'
 
 export function SigninForm() {
 
-  const { setIsSignin } = useContent()
+  const { showSignup, closeAuth } = useAuthDialog()
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
   const { user } = useAuth()
@@ -41,7 +41,9 @@ export function SigninForm() {
 
       console.log(data)
       setIsLoading(false)
-
+      
+      // Close auth dialog and reload page
+      closeAuth()
       window.location.href = '/'
 
 
@@ -59,7 +61,7 @@ export function SigninForm() {
         <div className="text-center space-y-2">
 
           <p className="text-green-600 text-sm">
-            <button onClick={() => setIsSignin(false)} className="font-semibold text-green-600 hover:text-green-700 transition-colors">
+            <button onClick={() => showSignup()} className="font-semibold text-green-600 hover:text-green-700 transition-colors">
               Sign up for free
             </button>
           </p>

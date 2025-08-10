@@ -28,7 +28,7 @@ export default async function Home() {
     email: `ctfllg@flex.com`,
     plan: ["VIP"/* , "PREMIUM", "PRO" */][Math.floor(Math.random() * 1)],
   }
-  const finalLocation = process.env.NODE_ENV === "production" ? location : { "ip": "182.3.36.4", "country": "Indonesia", "countryCode": "ID", "city": "Jakarta", "region": "Jakarta Raya", "currencyname": "Indonesian Rupiah", "currencycode": "IDR", "currencysymbol": "Rp", "flag": "https://ipdata.co/flags/id.png", "continent": "Asia", "continentcode": "AS", "latitude": -6.220799922943115, "longitude": 106.84030151367188, "timezone": "Asia/Jakarta", "abbr": "WIB", "currenttime": "2025-08-03T06:15:32+07:00" }
+  const finalLocation = process.env.NODE_ENV === "production" ? location : { "ip": "182.3.36.4", "country": "*********", "countryCode": "ID", "city": "******", "region": "***** ****", "currencyname": "******", "currencycode": "IDR", "currencysymbol": "Rp", "flag": "https://ipdata.co/flags/id.png", "continent": "Asia", "continentcode": "AS", "latitude": -6.220799922943115, "longitude": 106.84030151367188, "timezone": "Asia/Jakarta", "abbr": "WIB", "currenttime": "2025-08-03T06:15:32+07:00" }
 
 
   return (

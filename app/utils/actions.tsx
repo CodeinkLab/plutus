@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import { useDialog } from "@/app/lib/dialog"
+import { useDialog } from "@/app/hooks/dialog"
 import { fetchBTCAddressFromBlockchain, fetchAddressFromBlockCypher, fetchAddressFromTronscan, getWalletNetwork, randomDelay, fetchETHAddressFromBlockchain, fetchBCHAddressFromBlockchain } from "../lib/functions"
 import { useContent } from "../hooks/context"
 import { ReactNode, useEffect, useRef, useState } from "react"

@@ -3,7 +3,7 @@ import React, { useEffect } from 'react'
 import { useActions } from '../utils/actions'
 import { useAuth } from '../hooks/AuthContext'
 import { useContent } from '../hooks/context'
-import { dialog, useDialog } from '../lib/dialog'
+import { dialog, useDialog } from '../hooks/dialog'
 import { SigninForm } from './auth/SigninForm'
 import { SignupForm } from './auth/SignupForm'
 import { toast } from 'react-hot-toast'
@@ -12,29 +12,17 @@ import { sign } from 'crypto'
 const ServersDropDownComponent = () => {
     const { user } = useAuth()
     const dialog = useDialog()
-    const { isSignin, formValues, state, setFormValues } = useContent()
+    const { dialogType, formValues, state, setFormValues } = useContent()
     const [signin, setSignin] = React.useState(true)
 
     const handleAuth = () => {
         dialog.showDialog({
-            title: "",
+            title: dialogType ? "Welcome Back! Sign In" : "Sign up for A new Account",
             type: "component",
             message: "",
-            component: isSignin ? <SigninForm /> : <SignupForm />,
+            component: dialogType === "login" ? <SigninForm /> : dialogType === "register" ? <SignupForm /> : null,
         })
     }
-
-    useEffect(() => {
-        if (state.isOpen ) {
-            dialog.showDialog({
-                title: isSignin ? "Welcome Back! Sign In" : "Sign up for A new Account",
-                type: "component",
-                message: "",
-                component: isSignin ? <SigninForm /> : <SignupForm />,
-            })
-        } 
-
-    }, [isSignin, state.isOpen])
 
     const handleSignout = () => {
         dialog.showDialog({
